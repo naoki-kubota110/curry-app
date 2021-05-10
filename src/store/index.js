@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+// import firebase from 'firebase'
 
 Vue.use(Vuex)
 
@@ -25,11 +26,35 @@ export default new Vuex.Store({
       {id:17, name:'学芸会カレー', text:'みんな大好き！学芸会で作るような味を再現！定番のおいしさを味わえます', price:2440, subPrice:3650, img:'/img/17.jpg'},
       {id:18, name:'黄金に輝くチキンカレー', text:'カレーが黄金に輝く、超高級鶏肉を使用したカレーです', price:2700, subPrice:4050, img:'/img/18.jpg'},
     ],
-    cartItems:[]
+    // cartItems:[]
   },
   mutations: {
+    // deleteCartItem(state,cartId){
+    //   const index = state.cartItems.findIndex(cartItem => cartItem.cartId === cartId)
+    //   state.cartItems.splice(index,1)
+    // },
+      // addItemToCart(state,{cartId,item}){
+      //   item.cartId = cartId
+      //   state.cartItems.push(item)
+      // }
   },
   actions: {
+  //   deleteCartItem({getters,commit},cartId){
+  //     if(getters.uid){
+  //       firebase.firestore().collection(`users/${getters.uid}/cart`).doc(cartId).delete.then(()=>{
+  //         commit('deleteCartItem',cartId)
+  //       })
+  //     }
+  //   },
+      // addItemToCart({getters,commit},{item,number}){
+      //   if(getters.uid){
+      //     item.number = number
+      //     item.status = 0
+      //     firebase.firestore().collection(`users/${getters.uid}/cart`).add(item).then((doc)=>{
+      //       commit('addItemToCart',{cartId:doc.id,item})
+      //     })
+      //   }
+      // }
   },
   modules: {
   }

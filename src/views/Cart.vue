@@ -1,5 +1,6 @@
 <template>
 <v-container>
+    <div v-if="cartItemLength">
     <v-data-table 
     :headers="headers"
     :items="cart"
@@ -19,13 +20,15 @@
         <template v-slot:[`item.sum`]="{ item }">
             <td>{{item.price*item.number}}円</td>
         </template>
-        <template v-slot:[`item.delete`]="{ item }">
-            <v-btn color="danger">削除</v-btn>
+        <template v-slot:[`item.delete`]="{ item }" >
+            <v-btn @click="deleteConfirm(item.cartId)" color="error"><strong>削除</strong></v-btn>
         </template>
     </v-data-table>
+    </div>
 </v-container>
 </template>
 <script>
+import {mapActions} from 'vuex'
 export default {
     data(){
         return {
@@ -41,8 +44,22 @@ export default {
     },
     computed:{
         cart(){
-            let array = this.$store.state.itemData
-            return array
+            return this.$store.state.cartItems
+        },
+        cartItemLength(){
+            let array = this.$store.state.cartItems;
+            if(array.length===0){
+                return false
+            }else{
+                return true
+            }
+        }
+    },
+    methods:{
+        ...mapActions(['deleteCartItem']),
+        deleteConfirm(cartId){
+            if(confirm('削除してもよろしいですか？'))
+            this.deleteCartItem(cartId)
         }
     }
 }
