@@ -16,8 +16,11 @@
         <template v-slot:[`item.img`]="{ item }">
             <img :src="item.img" width="100px" height="100px">
         </template>
-                <template v-slot:[`item.sum`]="{ item }">
+        <template v-slot:[`item.sum`]="{ item }">
             <td>{{item.price*item.number}}円</td>
+        </template>
+        <template v-slot:[`item.delete`]="{ item }">
+            <v-btn color="danger">削除</v-btn>
         </template>
     </v-data-table>
 </v-container>
@@ -32,7 +35,7 @@ export default {
                 {text:'価格(税抜)',value:'price'},
                 {text:'数量',value:'number'},
                 {text:'小計',value:'sum'},
-                {text:'',value:'delete',sortable:false},
+                {value:'delete',sortable:false},
             ],
         }
     },
