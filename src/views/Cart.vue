@@ -1,0 +1,46 @@
+<template>
+<v-container>
+    <v-data-table 
+    :headers="headers"
+    :items="cart"
+    :items-per-page="3"
+    class="elevation-1"
+    >
+        <template v-slot:[`item.price`]="{ item }">
+            <td>{{item.price}}円</td>
+        </template>
+        <template v-slot:[`item.number`]="{ item }">
+            <td>{{item.number}}個</td>
+        </template>
+        <!-- ここに画像をスロットで表示させる -->
+        <template v-slot:[`item.img`]="{ item }">
+            <img :src="item.img" width="100px" height="100px">
+        </template>
+                <template v-slot:[`item.sum`]="{ item }">
+            <td>{{item.price*item.number}}円</td>
+        </template>
+    </v-data-table>
+</v-container>
+</template>
+<script>
+export default {
+    data(){
+        return {
+            headers:[
+                {text:'',value:'img',sortable:false},
+                {text:'商品名',value:'name'},
+                {text:'価格(税抜)',value:'price'},
+                {text:'数量',value:'number'},
+                {text:'小計',value:'sum'},
+                {text:'',value:'delete',sortable:false},
+            ],
+        }
+    },
+    computed:{
+        cart(){
+            let array = this.$store.state.itemData
+            return array
+        }
+    }
+}
+</script>
