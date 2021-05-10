@@ -5,7 +5,6 @@ import Cart from '../views/Cart.vue'
 import OrderHistory from '../views/OrderHistory.vue'
 import ItemDetail from '../views/ItemDetail.vue'
 import Login from '../views/Login.vue'
-import Order from '../views/Order.vue'
 import OrderComp from '../views/OrderComp.vue'
 import Register from '../views/Register.vue'
 
@@ -36,11 +35,6 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: Login
-  },
-  {
-    path: '/order',
-    name: 'Order',
-    component: Order
   },
   {
     path: '/orderComp',
