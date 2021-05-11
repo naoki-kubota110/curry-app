@@ -43,7 +43,7 @@ export default new Vuex.Store({
       firebase.auth.signOut();
     },
     //ユーザー登録
-    register({state, commit}, {,email,password}){
+    register({state, commit}, {email,password}){
       firebase.auth().createUserWithEmailAndPassword(email, password)
       .then(() => {
         let user = firebase.auth().currentUser;
