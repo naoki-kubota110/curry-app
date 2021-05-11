@@ -33,7 +33,7 @@ export default {
         ...mapActions(['addItemToCart']),
         addCart(){
             if(confirm(`${this.item.name}を${this.number}個追加しますがよろしいですか？`)){
-                this.addItemToCart({item:this.item,number:this.item.number})
+                this.addItemToCart({itemId:this.item.id,number:this.item.number})
             }
         }
     }
