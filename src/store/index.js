@@ -29,6 +29,9 @@ export default new Vuex.Store({
     ],
     cartItems:[]
   },
+  getters:{
+    uid:state => state.login_user ? state.login_user.uid:null,
+  },
   mutations: {
     setLoginUser(state, user){
       state.login_user = user;
@@ -40,7 +43,7 @@ export default new Vuex.Store({
       firebase.auth.signOut();
     },
     //ユーザー登録
-    register({state, commit}, {name,email,password}){
+    register({state, commit}, {,email,password}){
       firebase.auth().createUserWithEmailAndPassword(email, password)
       .then(() => {
         let user = firebase.auth().currentUser;
