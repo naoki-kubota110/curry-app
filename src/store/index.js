@@ -1,3 +1,4 @@
+import firebase from 'firebase'
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -5,6 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    login_user:null,
     itemData:[
       {id:1, name:'カツカレー', text:'食べると勝負に勝てると言われる勝つカレー。ラクラクカレー定番の１品です', price:1490, subPrice:2570, img:'/img/1.jpg'},
       {id:2, name:'ポークポークカレー・ミート', text:'グリーンアスパラと相性の良いベーコンにいろどりのフレッシュトマトをトッピングし特製マヨソースでまとめた商品です',price:1490, subPrice:2570,img:'/img/2.jpg'},
@@ -28,8 +30,34 @@ export default new Vuex.Store({
     cartItems:[]
   },
   mutations: {
+    setLoginUser(state, user){
+      state.login_user = user;
+    },
   },
   actions: {
+    //ログアウト処理
+    logout(){
+      firebase.auth.signOut();
+    },
+    //ユーザー登録
+    register({state, commit}, {name,email,password}){
+      firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        let user = firebase.auth().currentUser;
+        commit('setLoginUser', user);
+      }).catch((error) => {
+        state.errorMsg = error.message;
+      })
+    },
+    //ログイン
+    login({state,commit}, {email, password}){
+      firebase.auth().signInWithEmailAndPassword(email,password)
+      .then((user) => {
+        commit('setLoginUser', user);
+      }).catch((error) =>{
+        state.errorMsg = error.message;
+      })
+    },
   },
   modules: {
   }
