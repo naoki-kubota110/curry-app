@@ -1,6 +1,7 @@
 <template>
 <v-app>
   <Header></Header>
+  <SideNav></SideNav>
   <v-main>
     <router-view></router-view>
   </v-main>
@@ -17,6 +18,8 @@ export default {
   name: 'App',
   components:{
     Header,
+    SideNav,
+    Footer
   }
 };
 </script>
