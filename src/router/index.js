@@ -27,7 +27,7 @@ const routes = [
     component: OrderHistory
   },
   {
-    path: '/itemdetail',
+    path: '/itemdetail/:item_id',
     name: 'ItemDetail',
     component: ItemDetail
   },
