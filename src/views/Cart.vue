@@ -1,9 +1,9 @@
 <template>
 <v-container>
-    <div v-if="cartItemLength">
+    <div v-if="cartItems">
     <v-data-table 
     :headers="headers"
-    :items="order"
+    :items="cartItems"
     :items-per-page="3"
     class="elevation-1"
     >
@@ -13,7 +13,7 @@
         <template v-slot:[`item.number`]="{ item }">
             <td>{{item.number}}個</td>
         </template>
-        <!-- ここに画像をスロットで表示させる -->
+        ここに画像をスロットで表示させる -->
         <template v-slot:[`item.img`]="{ item }">
             <img :src="item.img" width="100px" height="100px">
         </template>
@@ -24,6 +24,9 @@
             <v-btn @click="deleteConfirm(item.cartId)" color="error"><strong>削除</strong></v-btn>
         </template>
     </v-data-table>
+    </div>
+    <div v-else>
+        <h1>商品はありません</h1>
     </div>
 </v-container>
 </template>
@@ -43,25 +46,23 @@ export default {
         }
     },
     computed:{
-        order(){
-            let cartItems = this.$store.state.orderItems.itemInfo;
-            let items = this.$store.state.itemData;
-            let array = []
-            cartItems.forEach((item)=>{
-                const sameId = (element) => element.id === item.itemId;
-                let sameIdItem = items.find(sameId);
-                array.push(sameIdItem);
-                console.log(sameIdItem)
-            })
-            return array
-        },
-        cartItemLength(){
-            let array = this.$store.state.orderItems.itemInfo;
-            if(array.length===0){
-                return false
-            }else{
-                return true
+        cartItems(){
+            if(this.$store.state.cartItems){
+                let itemData = this.$store.state.itemData;
+                let cartItems = this.$store.state.cartItems;
+                let itemInfo = cartItems.itemInfo
+                let array = [];
+                itemInfo.forEach((item)=>{
+                    console.log(item)
+                    const sameId = (element) => element.id === item.itemId;
+                    let sameIdItem = itemData.find(sameId);
+                    array.push(sameIdItem);
+                })
+                return array
+            }else {
+                return null
             }
+
         }
     },
     methods:{

@@ -28,13 +28,12 @@ export default new Vuex.Store({
       {id:17, name:'学芸会カレー', text:'みんな大好き！学芸会で作るような味を再現！定番のおいしさを味わえます', price:2440, subPrice:3650, img:'/img/17.jpg'},
       {id:18, name:'黄金に輝くチキンカレー', text:'カレーが黄金に輝く、超高級鶏肉を使用したカレーです', price:2700, subPrice:4050, img:'/img/18.jpg'},
     ],
-    orderItems:null
+    cartItems:null,
+    orderedItems:null
   },
   getters:{
-    uid:state=>state.login_user ? state.login_user.id:null,
-  },
-  getters:{
-    uid:state => state.login_user ? state.login_user.uid:null,
+    uid:state=>state.login_user ? state.login_user.uid:null,
+    orderId:state=>state.cartItems ? state.cartItems.orderId:null
   },
   mutations: {
     setLoginUser(state, user){
@@ -44,21 +43,30 @@ export default new Vuex.Store({
     //   const index = state.cartItems.findIndex(cartItem => cartItem.cartId === cartId)
     //   state.cartItems.splice(index,1)
     // },
-      addItemToCart(state,{cartId,order}){
-        order.cartId = cartId
-        state.orderItems = order
-      },
+    addItemToCart(state,{orderId,order}){
+      order.orderId = orderId
+      state.cartItems = order
+    },
+    addItemToOrderedItems(state,{orderId,order}){
+      order.orderId = orderId
+      state.orderedItems = order
+    },
+    clearCartItems(state){
+      state.cartItems = null
+    },
+    clearOrderedItems(state){
+      state.orderedItems = null
+    },
     errorDelete(state){
       state.login_user = null;
     },
     deleteLoginUser(state){
-      state.login_user = '';
+      state.login_user = null;
     }
   },
   actions: {
     //ログアウト処理
-    logout({commit}){
-      commit('deleteLoginUser');
+    logout(){
       firebase.auth().signOut();
     },
     //ユーザー登録
@@ -73,12 +81,24 @@ export default new Vuex.Store({
     },
     //ログイン
     login({state,commit}, {email, password}){
-      firebase.auth().signInWithEmailAndPassword(email,password)
-      .then((user) => {
-        commit('setLoginUser', user);
-      }).catch((error) =>{
-        state.errorMsg = error.message;
+      firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+      .then(() => {
+        firebase.auth().signInWithEmailAndPassword(email,password)
+        .then((user) => {
+          commit('setLoginUser', user);
+        }).catch((error) =>{
+          state.errorMsg = error.message;
+        })
       })
+    },
+    errorDelete({commit}){
+      commit('errorDelete');
+    },
+    setLoginUser({commit},user){
+      commit('setLoginUser',user);
+    },
+    deleteLoginUser({commit}){
+      commit('deleteLoginUser');
     },
   //   deleteCartItem({getters,commit},cartId){
   //     if(getters.uid){
@@ -87,23 +107,52 @@ export default new Vuex.Store({
   //       })
   //     }
   //   },
-      addItemToCart({getters,commit},{itemId,number}){
-        if(getters.uid){
+    addItemToCart({state,getters,commit},{itemId,number}){
+      let itemInfo = {itemId:itemId,itemNum:number}
+      let order = {
+        userId:this.getters.uid,
+        itemInfo:[itemInfo],
+        status:0,
+      };
+      //ログインしているかのチェック
+      if(getters.uid){
+        //すでにカートにアイテムが入っている人
+        if(getters.orderId){
+          let newCartItems = state.cartItems.itemInfo
+          newCartItems.push(itemInfo)
+          firebase.firestore().collection(`users/${getters.uid}/order`).doc(getters.orderId)
+          .update({
+            itemInfo:[...newCartItems]
+          })
+        }else{
           //もしすでにカート内にデータが存在した場合は、すでにあるカート情報に対してpushしてitemInfoを作ってアップデートする処理を書く。
-          let itemInfo = {itemId:itemId,itemNum:number}
-          let order = {
-            userId:this.getters.uid,
-            itemInfo:[itemInfo],
-            status:1,
-          }
           firebase.firestore().collection(`users/${getters.uid}/order`).add(order).then(doc=>{
-            commit('addItemToCart',{cartId:doc.id,order:order})
+            commit('addItemToCart',{orderId:doc.id,order:order})
           })
         }
-      },
-    errorDelete({commit}){
-      commit('errorDelete');
+        //ログインしていない人がストアのカートに商品を追加できる処理(リロードで消える)
+      }else{
+          commit('addItemToCart',{order:order})
+      }
     },
+    fetchOrderItems({getters,commit}){
+      if(getters.uid){
+        firebase.firestore().collection(`users/${getters.uid}/order`).get()
+        .then(snapShot=>{
+          snapShot.forEach(doc=>{
+            if(doc.data().status===0){
+              commit('addItemToCart',{orderId:doc.id,order:doc.data()})
+            }else{
+              commit('addItemToOrderedItems',{orderId:doc.id,order:doc.data()})
+            }
+          })
+        })
+      }
+    },
+    clearOrderItems({commit}){
+      commit('clearCartItems');
+      commit('clearOrderedItems');
+    }
   },
   modules: {
   }
