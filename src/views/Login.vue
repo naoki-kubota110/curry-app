@@ -18,10 +18,10 @@
                                         type="password"
                                         label="パスワード"/>
                             <v-btn color="primary" @click="signIn">ログイン</v-btn>
-                            <router-link to='/register'>未登録の方はこちら</router-link>
                         </v-form>
                     </v-card-text>
                 </v-card>
+                <router-link to='/register' style='text-decoration: none; color: bulue;'>ユーザー登録はこちら</router-link>
             </v-col>
         </v-row>
     </v-app>
