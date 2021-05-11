@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import Vuex, { mapGetters } from 'vuex'
-// import firebase from 'firebase'
+import Vuex from 'vuex'
+import firebase from 'firebase'
 
 Vue.use(Vuex)
 
@@ -46,20 +46,22 @@ export default new Vuex.Store({
   //       })
   //     }
   //   },
-      // addItemToCart({getters,commit},{itemId,number}){
-      //   if(getters.uid){
-        let order = {
-          userId:getters.uid,
-          itemId:itemId,
-          number:number,
-          status:0
-        }
-      //     firebase.firestore().collection(`users/${getters.uid}/order`).add(order).then((doc)=>{
-      //       commit('addItemToCart',{cartId:doc.id,item:doc.data()})
-      //     })
-      //   }
-      // }
+      addItemToCart({commit},{itemId,number}){
+        // if(getters.uid){
+          let itemInfo = JSON.stringify({itemId:itemId,itemNum:number})
+          let order = {
+            userId:'reidnvdsfnvioaf', //getters.uid,
+            itemInfo:itemInfo,
+            status:0,
+          }
+          firebase.firestore().collection(`users/reidnvdsfnvioaf/order`).add(order).then((doc)=>{
+            console.log('動いてる')
+            commit('addItemToCart',{cartId:doc.id,item:doc.data()})
+          })
+        // }
+      }
   },
   modules: {
   }
 })
+// ${getters.uid}

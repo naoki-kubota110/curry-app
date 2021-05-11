@@ -17,18 +17,18 @@ export default {
     data(){
         return {
             number:1,
-            item:''
+            item:{id:1, name:'カツカレー', text:'食べると勝負に勝てると言われる勝つカレー。ラクラクカレー定番の１品です', price:1490, subPrice:2570, img:'/img/1.jpg'},
         }
     },
-    created(){
-        let items = this.$store.state.items;
-        let paramId = this.$route.params.item_id;
-        items.forEach(item => {
-            if(item.id===paramId){
-                this.item = item;
-            }
-        });
-    },
+    // created(){
+    //     let items = this.$store.state.items;
+    //     let paramId = this.$route.params.item_id;
+    //     items.forEach(item => {
+    //         if(item.id===paramId){
+    //             this.item = item;
+    //         }
+    //     });
+    // },
     methods:{
         ...mapActions(['addItemToCart']),
         addCart(){
