@@ -100,15 +100,33 @@ export default new Vuex.Store({
     deleteLoginUser({commit}){
       commit('deleteLoginUser');
     },
-  //   deleteCartItem({getters,commit},cartId){
-  //     if(getters.uid){
-  //       firebase.firestore().collection(`users/${getters.uid}/order`).doc(cartId).delete.then(()=>{
-  //         commit('deleteCartItem',cartId)
-  //       })
-  //     }
-  //   },
+    deleteItemFromCart({state,getters,commit},{cartId}){
+      if(getters.uid){
+        let cartItems = state.cartItems
+        let a = JSON.stringify(cartItems.itemInfo)
+        a = JSON.parse(a)
+        const item = a.find(item => item.id === cartId)
+        const index = a.indexOf(item)
+        a.splice(index,1)
+        console.log(a)
+        cartItems.itemInfo = a
+        firebase.firestore().collection(`users/${getters.uid}/order`).doc(getters.orderId)
+        .update({
+          itemInfo:[...a]
+        }).then(()=>{
+            commit('addItemToCart',{orederId:getters.orderId,order:cartItems})
+          })
+      }
+    },
     addItemToCart({state,getters,commit},{itemId,number}){
-      let itemInfo = {itemId:itemId,itemNum:number}
+      //一意の文字列を作成
+      function getUniqueStr(myStrong){
+        var strong = 1000;
+        if (myStrong) strong = myStrong;
+        return new Date().getTime().toString(16)  + Math.floor(strong*Math.random()).toString(16)
+       }
+      let itemInfo = {id:getUniqueStr(),itemId:itemId,itemNum:number}
+      console.log(itemInfo)
       let order = {
         userId:this.getters.uid,
         itemInfo:[itemInfo],
@@ -118,14 +136,15 @@ export default new Vuex.Store({
       if(getters.uid){
         //すでにカートにアイテムが入っている人
         if(getters.orderId){
-          let newCartItems = state.cartItems.itemInfo
-          newCartItems.push(itemInfo)
+          let newCartItems = state.cartItems
+          newCartItems.itemInfo.push(itemInfo)
           firebase.firestore().collection(`users/${getters.uid}/order`).doc(getters.orderId)
           .update({
-            itemInfo:[...newCartItems]
+            itemInfo:[...newCartItems.itemInfo]
+          }).then(()=>{
+            commit('addItemToCart',{orederId:getters.orderId,order:newCartItems})
           })
         }else{
-          //もしすでにカート内にデータが存在した場合は、すでにあるカート情報に対してpushしてitemInfoを作ってアップデートする処理を書く。
           firebase.firestore().collection(`users/${getters.uid}/order`).add(order).then(doc=>{
             commit('addItemToCart',{orderId:doc.id,order:order})
           })

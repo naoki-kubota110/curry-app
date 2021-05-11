@@ -1,26 +1,27 @@
 <template>
 <v-container>
     <div v-if="cartItems">
-    <v-data-table 
+    <v-data-table
     :headers="headers"
     :items="cartItems"
-    :items-per-page="3"
+    :items-per-page="5"
+    item-key="cartId"
     class="elevation-1"
+    disable-sort
     >
         <template v-slot:[`item.price`]="{ item }">
             <td>{{item.price}}円</td>
         </template>
         <template v-slot:[`item.number`]="{ item }">
-            <td>{{item.number}}個</td>
+            <td>{{item.itemNum}}個</td>
         </template>
-        ここに画像をスロットで表示させる -->
         <template v-slot:[`item.img`]="{ item }">
             <img :src="item.img" width="100px" height="100px">
         </template>
         <template v-slot:[`item.sum`]="{ item }">
-            <td>{{item.price*item.number}}円</td>
+            <td>{{item.price*item.itemNum}}円</td>
         </template>
-        <template v-slot:[`item.delete`]="{ item }" >
+        <template v-slot:[`item.delete`]="{ item }">
             <v-btn @click="deleteConfirm(item.cartId)" color="error"><strong>削除</strong></v-btn>
         </template>
     </v-data-table>
@@ -50,14 +51,23 @@ export default {
             if(this.$store.state.cartItems){
                 let itemData = this.$store.state.itemData;
                 let cartItems = this.$store.state.cartItems;
-                let itemInfo = cartItems.itemInfo
+                let itemInfo = cartItems.itemInfo;
                 let array = [];
-                itemInfo.forEach((item)=>{
-                    console.log(item)
-                    const sameId = (element) => element.id === item.itemId;
-                    let sameIdItem = itemData.find(sameId);
-                    array.push(sameIdItem);
+
+                itemInfo.forEach((item1)=>{
+                    itemData.forEach((item2)=>{
+                        if(item1.itemId==item2.id){
+                            console.log(item1)
+                            item2.itemNum = item1.itemNum
+                            item2.cartId = item1.id
+                            console.log(item2)
+                            let a = JSON.stringify(item2)
+                            a = JSON.parse(a)
+                            array.push(a)
+                        }
+                    })
                 })
+                console.log(array)
                 return array
             }else {
                 return null
@@ -66,10 +76,10 @@ export default {
         }
     },
     methods:{
-        ...mapActions(['deleteCartItem']),
+        ...mapActions(['deleteItemFromCart']),
         deleteConfirm(cartId){
             if(confirm('削除してもよろしいですか？'))
-            this.deleteCartItem(cartId)
+            this.deleteItemFromCart(cartId)
         }
     }
 }
