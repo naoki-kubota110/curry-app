@@ -6,7 +6,7 @@
 
              <router-link style="" to='/cart' class="mx-5 link">ショッピングカート</router-link>
              <router-link to='/orderhistory' class="mx-5 link">注文履歴</router-link>
-             <router-link to='/login' class="mx-5 link">ログイン</router-link>
+             <router-link to='/login' class="mx-5 link" v-if="!$store.state.login_user">ログイン</router-link>
              <v-btn @click="logout" class="mx-5 link" v-if="$store.state.login_user">ログアウト</v-btn>
          </v-toolbar>
     </v-card>

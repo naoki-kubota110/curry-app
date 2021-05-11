@@ -32,14 +32,18 @@
 import {mapActions} from 'vuex'
 
 export default {
+    name:'Login',
     data(){
         return {
             email:'',
             password:'',
         }
     },
+    created(){
+        this.errorDelete();
+    },
     methods:{
-        ...mapActions(['login']),
+        ...mapActions(['login','errorDelete']),
         signIn(){
             this.login({email:this.email,password:this.password});
             this.email = '';

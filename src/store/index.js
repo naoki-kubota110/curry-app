@@ -37,11 +37,18 @@ export default new Vuex.Store({
     setLoginUser(state, user){
       state.login_user = user;
     },
+    errorDelete(state){
+      state.login_user = null;
+    },
+    deleteLoginUser(state){
+      state.login_user = '';
+    }
   },
   actions: {
     //ログアウト処理
-    logout(){
-      firebase.auth.signOut();
+    logout({commit}){
+      commit('deleteLoginUser');
+      firebase.auth().signOut();
     },
     //ユーザー登録
     register({state, commit}, {email,password}){
@@ -61,6 +68,9 @@ export default new Vuex.Store({
       }).catch((error) =>{
         state.errorMsg = error.message;
       })
+    },
+    errorDelete({commit}){
+      commit('errorDelete');
     },
   },
   modules: {

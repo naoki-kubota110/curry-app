@@ -18,11 +18,10 @@
                                         prepend-inner-icon="mdi-key"
                                         type="password"
                                         label="パスワード"/>
-                            <v-btn color="primary" @click="signIn">ログイン</v-btn>
+                            <v-btn color="primary" @click="signIn">新規登録</v-btn>
                         </v-form>
                     </v-card-text>
                 </v-card>
-                <router-link to='/register' style='text-decoration: none; color: bulue;'>ユーザー登録はこちら</router-link>
             </v-col>
         </v-row>
     </v-app>
@@ -32,16 +31,20 @@
 import {mapActions} from 'vuex'
 
 export default {
+    name:'Register',
     data(){
         return {
             email:'',
             password:'',
         }
     },
+    created(){
+        this.errorDelete();
+    },
     methods:{
-        ...mapActions(['login']),
+        ...mapActions(['register','errorDelete']),
         signIn(){
-            this.login({email:this.email,password:this.password});
+            this.register({email:this.email,password:this.password});
             this.email = '';
             this.password = '';
         }
