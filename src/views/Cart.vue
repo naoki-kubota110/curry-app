@@ -3,7 +3,7 @@
     <div v-if="cartItemLength">
     <v-data-table 
     :headers="headers"
-    :items="cart"
+    :items="order"
     :items-per-page="3"
     class="elevation-1"
     >
@@ -43,11 +43,20 @@ export default {
         }
     },
     computed:{
-        cart(){
-            return this.$store.state.cartItems
+        order(){
+            let cartItems = this.$store.state.orderItems.itemInfo;
+            let items = this.$store.state.itemData;
+            let array = []
+            cartItems.forEach((item)=>{
+                const sameId = (element) => element.id === item.itemId;
+                let sameIdItem = items.find(sameId);
+                array.push(sameIdItem);
+                console.log(sameIdItem)
+            })
+            return array
         },
         cartItemLength(){
-            let array = this.$store.state.cartItems;
+            let array = this.$store.state.orderItems.itemInfo;
             if(array.length===0){
                 return false
             }else{

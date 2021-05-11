@@ -1,7 +1,6 @@
 import firebase from 'firebase'
 import Vue from 'vue'
 import Vuex from 'vuex'
-import firebase from 'firebase'
 
 Vue.use(Vuex)
 
@@ -28,7 +27,7 @@ export default new Vuex.Store({
       {id:17, name:'学芸会カレー', text:'みんな大好き！学芸会で作るような味を再現！定番のおいしさを味わえます', price:2440, subPrice:3650, img:'/img/17.jpg'},
       {id:18, name:'黄金に輝くチキンカレー', text:'カレーが黄金に輝く、超高級鶏肉を使用したカレーです', price:2700, subPrice:4050, img:'/img/18.jpg'},
     ],
-    // cartItems:[]
+    orderItems:null
   },
   getters:{
     uid:state=>state.login_user ? state.login_user.id:null,
@@ -41,10 +40,10 @@ export default new Vuex.Store({
     //   const index = state.cartItems.findIndex(cartItem => cartItem.cartId === cartId)
     //   state.cartItems.splice(index,1)
     // },
-      // addItemToCart(state,{cartId,item}){
-      //   item.cartId = cartId
-      //   state.cartItems.push(item)
-      // }
+      addItemToCart(state,{cartId,order}){
+        order.cartId = cartId
+        state.orderItems = order
+      }
   },
   actions: {
     //ログアウト処理
@@ -77,22 +76,21 @@ export default new Vuex.Store({
   //       })
   //     }
   //   },
-      addItemToCart({commit},{itemId,number}){
-        // if(getters.uid){
-          let itemInfo = JSON.stringify({itemId:itemId,itemNum:number})
+      addItemToCart({getters,commit},{itemId,number}){
+        if(getters.uid){
+          //もしすでにカート内にデータが存在した場合は、すでにあるカート情報に対してpushしてitemInfoを作ってアップデートする処理を書く。
+          let itemInfo = {itemId:itemId,itemNum:number}
           let order = {
-            userId:'reidnvdsfnvioaf', //getters.uid,
-            itemInfo:itemInfo,
-            status:0,
+            userId:this.getters.uid,
+            itemInfo:[itemInfo],
+            status:1,
           }
-          firebase.firestore().collection(`users/reidnvdsfnvioaf/order`).add(order).then((doc)=>{
-            console.log('動いてる')
-            commit('addItemToCart',{cartId:doc.id,item:doc.data()})
+          firebase.firestore().collection(`users/${getters.uid}/order`).add(order).then(doc=>{
+            commit('addItemToCart',{cartId:doc.id,order:order})
           })
-        // }
+        }
       },
   },
   modules: {
   }
 })
-// ${getters.uid}
