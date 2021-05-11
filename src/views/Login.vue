@@ -18,7 +18,9 @@
                                         prepend-inner-icon="mdi-key"
                                         type="password"
                                         label="パスワード"/>
-                            <v-btn color="primary" @click="signIn">ログイン</v-btn>
+                            <router-link to="/">
+                                <v-btn color="primary" @click="signIn">ログイン</v-btn>
+                            </router-link>
                         </v-form>
                     </v-card-text>
                 </v-card>
