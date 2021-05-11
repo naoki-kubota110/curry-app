@@ -5,7 +5,7 @@
                 <v-card>
                     <v-card-title>ログイン</v-card-title>
                     <v-divider></v-divider>
-                    <p v-if="true">
+                    <p style="color:red;" v-if="$store.state.errorMsg">
                         <strong>{{$store.state.errorMsg}}</strong>
                     </p>
                     <v-card-text>
@@ -37,8 +37,6 @@ export default {
             email:'',
             password:'',
         }
-    },
-    created(){
     },
     methods:{
         ...mapActions(['login']),

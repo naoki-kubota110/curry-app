@@ -7,6 +7,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     login_user:null,
+    errorMsg:'',
     itemData:[
       {id:1, name:'カツカレー', text:'食べると勝負に勝てると言われる勝つカレー。ラクラクカレー定番の１品です', price:1490, subPrice:2570, img:'/img/1.jpg'},
       {id:2, name:'ポークポークカレー・ミート', text:'グリーンアスパラと相性の良いベーコンにいろどりのフレッシュトマトをトッピングし特製マヨソースでまとめた商品です',price:1490, subPrice:2570,img:'/img/2.jpg'},
