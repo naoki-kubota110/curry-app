@@ -1,9 +1,10 @@
 <template>
     <v-app>
-        <v-row>
+        <v-row justify="center">
             <v-col cols="12" sm="10" md="8" lg="6">
                 <v-card>
-                    <p v-if="$store.state.errorMsg">
+                    <v-card-title>ログイン</v-card-title>
+                    <p v-if="true">
                         <strong>{{$store.state.errorMsg}}</strong>
                     </p>
                     <v-card-text>
@@ -16,9 +17,8 @@
                                         prepend-inner-icon="mdi-key"
                                         type="password"
                                         label="パスワード"/>
-                            <!-- ここ怪しい -->
-                            <v-btn @click="$router.push('/')">キャンセル</v-btn>
                             <v-btn color="primary" @click="signIn">ログイン</v-btn>
+                            <router-link to='/register'>未登録の方はこちら</router-link>
                         </v-form>
                     </v-card-text>
                 </v-card>
@@ -38,10 +38,9 @@ export default {
         }
     },
     created(){
-        this.errorDelete();
     },
     methods:{
-        ...mapActions(['login', errorDelete]),
+        ...mapActions(['login']),
         signIn(){
             this.login({email:this.email,password:this.password});
             this.email = '';
