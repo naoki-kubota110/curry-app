@@ -4,6 +4,7 @@
             <v-col cols="12" sm="10" md="8" lg="6">
                 <v-card>
                     <v-card-title>ログイン</v-card-title>
+                    <v-divider></v-divider>
                     <p v-if="true">
                         <strong>{{$store.state.errorMsg}}</strong>
                     </p>
