@@ -4,10 +4,11 @@
     <SearchForm/>
     </v-layout>
     <v-flex xs12 class="text-left">
-      <h2>カレー一覧</h2>
     </v-flex>
 
     <v-layout row rap justify-center>
+      <v-row>
+      <v-col v-for="index in 3" :key="index">
         <v-card id="item" v-for="(item,index) in itemData" :key="index" outlined width="230">
           <!-- 画像 -->
           <div id="img">
@@ -27,6 +28,8 @@
             <v-card-text></v-card-text>
           </div>
         </v-card>
+      </v-col>
+      </v-row>
     </v-layout>
   </v-container>
 
