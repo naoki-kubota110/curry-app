@@ -5,7 +5,7 @@
                 <v-card>
                     <v-card-title>ログイン</v-card-title>
                     <v-divider></v-divider>
-                    <p v-if="true">
+                    <p style="color:red;" v-if="$store.state.errorMsg">
                         <strong>{{$store.state.errorMsg}}</strong>
                     </p>
                     <v-card-text>
@@ -18,7 +18,9 @@
                                         prepend-inner-icon="mdi-key"
                                         type="password"
                                         label="パスワード"/>
-                            <v-btn color="primary" @click="signIn">ログイン</v-btn>
+                            <router-link to="/">
+                                <v-btn color="primary" @click="signIn">ログイン</v-btn>
+                            </router-link>
                         </v-form>
                     </v-card-text>
                 </v-card>
@@ -32,6 +34,7 @@
 import {mapActions} from 'vuex'
 
 export default {
+    name:'Login',
     data(){
         return {
             email:'',
@@ -39,9 +42,10 @@ export default {
         }
     },
     created(){
+        this.errorDelete();
     },
     methods:{
-        ...mapActions(['login']),
+        ...mapActions(['login','errorDelete']),
         signIn(){
             this.login({email:this.email,password:this.password});
             this.email = '';
