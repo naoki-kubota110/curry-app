@@ -1,7 +1,7 @@
 <template>
-    <v-card color="gray lighten-4" flat height="200px" tile>
+    <v-card color="gray lighten-4" flat  tile>
          <v-toolbar dense>
-             <v-toolbar-title><img src="../src/asset/header_logo.png" alt=""></v-toolbar-title>
+             <v-toolbar-title><img alt="main logo" src="../../public/img/header_logo.png" height="35"></v-toolbar-title>
              <v-spacer></v-spacer>
 
              <router-link style="" to='/cart' class="mx-5 link">ショッピングカート</router-link>
