@@ -29,6 +29,9 @@ export default new Vuex.Store({
     ],
     cartItems:[]
   },
+  getters:{
+    uid:state => state.login_user ? state.login_user.uid:null,
+  },
   mutations: {
     setLoginUser(state, user){
       state.login_user = user;

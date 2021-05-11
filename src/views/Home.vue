@@ -1,14 +1,13 @@
 <template>
-  <v-container id="container">
+  <v-container fluid id="container">
     <v-layout row rap justify-left>
     <SearchForm/>
     </v-layout>
     <v-flex xs12 class="text-left">
     </v-flex>
-
-    <v-layout row rap justify-center>
+  
+    <v-layout row rap justify-center> 
       <v-row>
-      <v-col v-for="index in 3" :key="index">
         <v-card id="item" v-for="(item,index) in itemData" :key="index" outlined width="230">
           <!-- 画像 -->
           <div id="img">
@@ -23,12 +22,10 @@
           </div>
           <!-- 金額 -->
           <div>
-            <v-card-text>&nbsp;М&nbsp;{{item.price}}円(税抜き)<br/>
-            &nbsp;L&nbsp;{{item.subPrice}}円(税抜き)</v-card-text>
-            <v-card-text></v-card-text>
+            <v-card-text>&nbsp;普通&nbsp;{{item.price}}円(税抜き)<br/>
+            </v-card-text>
           </div>
         </v-card>
-      </v-col>
       </v-row>
     </v-layout>
   </v-container>
