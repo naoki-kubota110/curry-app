@@ -1,7 +1,7 @@
 <template>
 <v-app>
   <Header></Header>
-  <SideNav></SideNav>
+  <!-- <SideNav></SideNav> -->
   <v-main>
     <router-view></router-view>
   </v-main>
@@ -11,14 +11,11 @@
 
 <script>
 import Header from '@/components/Header.vue'
-import Footer from '@/components/Footer.vue'
-import SideNav from '@/components/SideNav.vue'
+
 export default {
   name: 'App',
   components:{
     Header,
-    Footer,
-    SideNav
   }
 };
 </script>
