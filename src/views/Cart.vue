@@ -57,17 +57,14 @@ export default {
                 itemInfo.forEach((item1)=>{
                     itemData.forEach((item2)=>{
                         if(item1.itemId==item2.id){
-                            console.log(item1)
                             item2.itemNum = item1.itemNum
                             item2.cartId = item1.id
-                            console.log(item2)
                             let a = JSON.stringify(item2)
                             a = JSON.parse(a)
                             array.push(a)
                         }
                     })
                 })
-                console.log(array)
                 return array
             }else {
                 return null

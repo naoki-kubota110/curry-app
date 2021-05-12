@@ -119,23 +119,25 @@ export default new Vuex.Store({
       }
     },
     addItemToCart({state,getters,commit},{itemId,number}){
-      //一意の文字列を作成
+      //一意の文字列を作成(ID用)
       function getUniqueStr(myStrong){
         var strong = 1000;
         if (myStrong) strong = myStrong;
         return new Date().getTime().toString(16)  + Math.floor(strong*Math.random()).toString(16)
        }
       let itemInfo = {id:getUniqueStr(),itemId:itemId,itemNum:number}
-      console.log(itemInfo)
       let order = {
-        userId:this.getters.uid,
+        userId:getters.uid,
         itemInfo:[itemInfo],
         status:0,
       };
+
       //ログインしているかのチェック
       if(getters.uid){
-        //すでにカートにアイテムが入っている人
+        //すでにカートにアイテムが入っている人(orderIdが入ってたら)
         if(getters.orderId){
+          console.log('2回目以降の追加')
+          console.log(getters.orderId)
           let newCartItems = state.cartItems
           newCartItems.itemInfo.push(itemInfo)
           firebase.firestore().collection(`users/${getters.uid}/order`).doc(getters.orderId)
@@ -145,6 +147,8 @@ export default new Vuex.Store({
             commit('addItemToCart',{orederId:getters.orderId,order:newCartItems})
           })
         }else{
+          console.log('新規追加')
+          console.log(getters.orderId)
           firebase.firestore().collection(`users/${getters.uid}/order`).add(order).then(doc=>{
             commit('addItemToCart',{orderId:doc.id,order:order})
           })
