@@ -1,14 +1,15 @@
 <template>
   <v-container fluid id="container">
-    <v-layout row rap justify-left>
-    <SearchForm/>
+    <v-layout justify-center width="1400px">
+    <SearchForm></SearchForm>
     </v-layout>
     <v-flex xs12 class="text-left">
     </v-flex>
   
-    <v-layout row rap justify-center> 
+    <v-container v-if="$store.state.flag" class="my-50" justify-center>
       <v-row>
-        <v-card id="item" v-for="(item,index) in itemData" :key="index" outlined width="230">
+      <v-col cols="4" v-for="(item,index) in itemData" :key="index">
+        <v-card id="item">
           <!-- 画像 -->
           <div id="img">
             <v-img :src="item.img" alt="画像"></v-img>
@@ -26,22 +27,28 @@
             </v-card-text>
           </div>
         </v-card>
+      </v-col>
       </v-row>
-    </v-layout>
+    </v-container>
   </v-container>
 
 </template>
 
 <script>
 import {mapState} from 'vuex'
+import SearchForm from '../components/Search.vue';
 
 export default {
-    name:'Home',
-
+  name: "Home",
+  components: {
+    SearchForm //使用するためにコンポーネントに追加
+  },
   computed: mapState({
     itemData: state => state.itemData
-  })
+  }),
+  
+
 }
- 
+
 </script>
 	
