@@ -1,6 +1,7 @@
 <template>
 <v-app>
   <Header></Header>
+  <Search></Search>
   <SideNav></SideNav>
   <v-main>
     <router-view></router-view>
@@ -11,15 +12,19 @@
 
 <script>
 import Header from '@/components/Header.vue'
+import Search from '@/components/Search.vue'
 import Footer from '@/components/Footer.vue'
 import SideNav from '@/components/SideNav.vue'
+
 
 export default {
   name: 'App',
   components:{
     Header,
+    Search,
     SideNav,
-    Footer
+    Footer,
+    
   }
 };
 </script>
