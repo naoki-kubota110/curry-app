@@ -47,15 +47,26 @@ export default new Vuex.Store({
       order.orderId = orderId
       state.cartItems = order
     },
+    addItemToCartForNoUser(state,itemInfo){
+      console.log(itemInfo)
+      let cartItems = state.cartItems
+      cartItems.itemInfo.push(itemInfo)
+    },
     addItemToOrderedItems(state,{orderId,order}){
       order.orderId = orderId
+<<<<<<< HEAD
+      let a = state.orderedItems
+      console.log(a)
+      a.push(order)
+=======
       state.orderedItems.push(order)
+>>>>>>> develop
     },
     clearCartItems(state){
-      state.cartItems = null
+      state.cartItems = null;
     },
     clearOrderedItems(state){
-      state.orderedItems = null
+      state.orderedItems = [];
     },
     errorDelete(state){
       state.login_user = null;
@@ -116,6 +127,13 @@ export default new Vuex.Store({
         .then(()=>{
             commit('deleteCartItem',index)
         })
+      }else{
+        let cartItems = state.cartItems
+        let a = JSON.stringify(cartItems.itemInfo)
+        a = JSON.parse(a)
+        const item = a.find(item => item.id === cartId)
+        const index = a.indexOf(item)
+        commit('deleteCartItem',index)
       }
     },
     addItemToCart({state,getters,commit},{itemId,number}){
@@ -151,7 +169,13 @@ export default new Vuex.Store({
         }
         //ログインしていない人がストアのカートに商品を追加できる処理(リロードで消える)
       }else{
+        //ストアのカート内にデータがある時
+        if(state.cartItems){
+          commit('addItemToCartForNoUser',itemInfo)
+        //ストアのカートにデータがない時
+        }else{
           commit('addItemToCart',{order:order})
+        }
       }
     },
     fetchOrderItems({getters,commit}){

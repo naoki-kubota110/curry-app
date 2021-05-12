@@ -35,7 +35,7 @@ export default {
       }else{
         this.deleteLoginUser();
         this.clearOrderItems();
-        this.$router.push('/').catch(() => {})
+        // this.$router.push('/').catch(() => {})
       }
     })
   }
