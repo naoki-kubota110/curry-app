@@ -54,9 +54,13 @@ export default new Vuex.Store({
     },
     addItemToOrderedItems(state,{orderId,order}){
       order.orderId = orderId
+<<<<<<< HEAD
       let a = state.orderedItems
       console.log(a)
       a.push(order)
+=======
+      state.orderedItems.push(order)
+>>>>>>> develop
     },
     clearCartItems(state){
       state.cartItems = null;
