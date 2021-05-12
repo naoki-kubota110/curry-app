@@ -29,7 +29,7 @@ export default new Vuex.Store({
       {id:18, name:'黄金に輝くチキンカレー', text:'カレーが黄金に輝く、超高級鶏肉を使用したカレーです', price:2700, subPrice:4050, img:'/img/18.jpg'},
     ],
     cartItems:null,
-    orderedItems:null
+    orderedItems:[]
   },
   getters:{
     uid:state=>state.login_user ? state.login_user.uid:null,
@@ -49,7 +49,7 @@ export default new Vuex.Store({
     },
     addItemToOrderedItems(state,{orderId,order}){
       order.orderId = orderId
-      state.orderedItems = order
+      state.orderedItems.push(order)
     },
     clearCartItems(state){
       state.cartItems = null
