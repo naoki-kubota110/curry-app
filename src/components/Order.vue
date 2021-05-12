@@ -6,25 +6,25 @@
           <v-form ref="form" v-model="valid" lazy-validation>
             <p class="font-weight-bold"><big>お届け先情報</big></p>
             <div>
-              お名前<v-text-field
-                label=""
-                v-model="addresses.name"
+              お名前
+              <v-text-field
+                v-model="orderInfo.name"
                 :rules="nameRules"
               >
               </v-text-field>
             </div>
             <div>
-              メールアドレス<v-text-field
-                label=""
-                v-model="addresses.email"
+              メールアドレス
+              <v-text-field
+                v-model="orderInfo.email"
                 :rules="emailRules"
               >
               </v-text-field>
             </div>
             <div>
-              郵便番号<v-text-field
-                label=""
-                v-model="addresses.post"
+              郵便番号
+              <v-text-field
+                v-model="orderInfo.post"
                 :rules="postRules"
               >
               </v-text-field>
@@ -32,45 +32,39 @@
             <div>
               住所
               <v-text-field
-                label=""
-                v-model="addresses.address"
+                v-model="orderInfo.address"
                 :rules="addressRules"
               >
               </v-text-field>
             </div>
             <div>
-              電話番号<v-text-field
-                label=""
-                v-model="addresses.phone"
+              電話番号
+              <v-text-field
+                v-model="orderInfo.phone"
                 :rules="phoneRules"
               >
               </v-text-field>
             </div>
             <div>配達日時</div>
-            <input type="date" v-model="addresses.date" :rules="dateRules" />
+            <input type="date" v-model="orderInfo.date" :rules="dateRules">
             <v-select
-              v-model="addresses.time"
+              v-model="orderInfo.time"
               :items="items"
-              label=""
               :rules="timeRules"
             ></v-select>
-            <p class="font-weight-bold"><big>お支払い方法</big></p>
+            <div>お支払い方法</div>
             <v-radio-group
               row
-              v-model="addresses.radioGroup2"
+              v-model="orderInfo.status"
               :rules="payRules"
             >
-              <v-radio label="代金引換" :value="代金引換"></v-radio>
-              <v-radio
-                label="クレジットカード"
-                :value="クレジットカード"
-              ></v-radio>
+              <v-radio label="代金引換" :value="1"></v-radio>
+              <v-radio label="クレジットカード" :value="2"></v-radio>
             </v-radio-group>
-            <v-row class="button">
+            <v-row>
               <v-col>
-                <v-btn @click="submit" round class="orange"
-                  >この内容で注文する</v-btn
-                >
+                <v-btn rounded>リセット</v-btn>
+                <v-btn @click="submit" rounded class="orange">この内容で注文する</v-btn>
               </v-col>
             </v-row>
           </v-form>
@@ -80,17 +74,21 @@
   </v-app>
 </template>
 
-<style lang="scss">
+<style scoped>
 .button {
   text-align: center;
 }
 </style>
 
 <script>
+import {mapActions} from 'vuex'
 export default {
   data() {
     return {
-      addresses: {},
+      orderInfo: {
+        status:1
+      },
+
       valid: true,
       nameRules: [(v) => !!v || "名前を入力してください"],
       emailRules: [
@@ -113,13 +111,12 @@ export default {
           /^\d{2,5}-\d{1,4}-\d{4}$/.test(v) ||
           "電話番号はXXXX-XXXX-XXXXの形式で入力してください",
       ],
-      // dateRules:[
-      //  v => !!v || '配達日を入力してください',
-      // ],
+      dateRules:[
+       v => !!v || '配達日を入力してください',
+      ],
       timeRules: [(v) => !!v || "配達日時を選択してください"],
       payRules: [(v) => !!v || "お支払い方法を選択してください"],
       pay: {},
-      radioGroup: 1,
       items: [
         "10時",
         "11時",
@@ -134,26 +131,29 @@ export default {
     };
   },
   methods: {
+    ...mapActions(['orderConfirm']),
     submit() {
+      // if(this.orderInfo.name===undefined){
+      //   alert('名前を入力してください')
+      //   console.log('おk')
+      // }else{
       const inquiry = `この内容で注文します
-      【お名前】${this.addresses.name}
-      【メールアドレス】${this.addresses.email}
-      【郵便番号】${this.addresses.post}
-      【住所】${this.addresses.address}
-      【電話番号】${this.addresses.phone}
-      【配達日】${this.addresses.date}
-      【配達時刻】${this.addresses.time}
-      【お支払い方法】${this.addresses.radioGroup2}
+      【お名前】${this.orderInfo.name}
+      【メールアドレス】${this.orderInfo.email}
+      【郵便番号】${this.orderInfo.post}
+      【住所】${this.orderInfo.address}
+      【電話番号】${this.orderInfo.phone}
+      【配達日】${this.orderInfo.date}
+      【配達時刻】${this.orderInfo.time}
+      【お支払い方法】${this.orderInfo.status}
       `;
-      confirm(inquiry);
-      //バリデーションチェック
-      if (this.$refs.form.validate()) {
-        //送信処理
-        this.success = true;
-      } else {
-        this.success = false;
+      if(confirm(inquiry)){
+        const date = new Date()
+        console.log(date.getTime())
+        this.orderInfo.orderDate = date.getTime()
+        this.orderConfirm(this.orderInfo)
       }
-      //this.$refs.form.reset()
+      // }
     },
   },
 };

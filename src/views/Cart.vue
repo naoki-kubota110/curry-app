@@ -25,14 +25,14 @@
             <td>{{item.price*item.itemNum}}円</td>
         </template>
         <template v-slot:[`item.delete`]="{ item }">
-            <v-btn v-if="show" @click="deleteConfirm(item.cartId)" color="error"><strong>削除</strong></v-btn>
+            <v-btn v-if="show" @click="deleteConfirm(item.cartId)" color="error" rounded><strong>削除</strong></v-btn>
         </template>
     </v-data-table>
     <div>
         <h2>消費税：{{priceSum*tax}}円</h2>
         <h2>ご注文金額合計：{{Math.floor(priceSum*(1+tax))}}円(税込)</h2>
-        <v-btn v-if="show" color="orange" dark @click="show=!show">注文に進む</v-btn>
-        <v-btn v-if="!show" @click="show=!show">カートに戻る</v-btn>
+        <v-btn v-if="show" color="orange" dark @click="show=!show" rounded>注文に進む</v-btn>
+        <v-btn v-if="!show" @click="show=!show" rounded>カートに戻る</v-btn>
     </div>
     <Order v-show="!show"/>
     </div>
@@ -68,21 +68,18 @@ export default {
                 let itemData = this.$store.state.itemData;
                 let cartItems = this.$store.state.cartItems;
                 let itemInfo = cartItems.itemInfo;
-                console.log(itemInfo)
                 let array = [];
                 itemInfo.forEach((itemIn)=>{
                     itemData.forEach((itemD)=>{
                         if(itemIn.itemId==itemD.id){
                             itemD.itemNum = itemIn.itemNum
                             itemD.cartId = itemIn.id
-                            console.log(itemD)
                             let a = JSON.stringify(itemD)
                             a = JSON.parse(a)
                             array.push(a)
                         }
                     })
                 })
-                console.log(array)
                 return array
             }else {
                 return null
