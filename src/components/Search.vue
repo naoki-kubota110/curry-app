@@ -1,17 +1,13 @@
 <template>
 <v-container>
- 
-<!--ここから追加-->
-<v-container>
 <v-row  style="height: 100px">
-  <v-col style="background-color: #FFCDD2" cols="10" sm="8" md="6" lg="4" xl="3">
-  <v-sheet color="red" tile class="pa-1">商品を検索する</v-sheet>
+  <v-col style="background-color: white" >
+  <v-sheet color="grey" tile class="pa-1">商品を検索する</v-sheet>
     <input type="text" placeholder="Search" v-model="search_term" aria-label="Search" />
-    <v-btn v-on:click.prevent="getArticles()">検索</v-btn>
-    <v-btn v-on:click="removetext()">クリア</v-btn>
+    <v-btn color="secondary" medium v-on:click.prevent="getArticles()">検索</v-btn>
+    <v-btn color="secondary" medium outlined v-on:click="removetext()">クリア</v-btn>
   </v-col>
 </v-row>
-</v-container>
  <!-- 表示 -->
 <v-row>
 <v-col cols="4" v-for="(search, index) in changeView" :key="index">
@@ -25,9 +21,6 @@
 </v-row>
 </v-container>
 </template>
-
-
-
 <script>
 export default {
     name:'Search',

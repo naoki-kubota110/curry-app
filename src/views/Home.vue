@@ -1,9 +1,7 @@
 <template>
-<v-container fluid id="container">
-  <v-layout justify-center width="1400px">
+<v-container justify-center id="container">
+  <v-flex xs12 class="text-left" justify-center>
   <SearchForm></SearchForm>
-  </v-layout>
-  <v-flex xs12 class="text-left">
   </v-flex>
   <v-container v-if="$store.state.flag" class="my-50" justify-center>
   <v-row>
@@ -44,9 +42,6 @@ export default {
   computed: mapState({
     itemData: state => state.itemData
   }),
-  
-
 }
-
 </script>
 	
