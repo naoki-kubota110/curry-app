@@ -14,6 +14,8 @@
 import Header from '@/components/Header.vue'
 import Footer from '@/components/Footer.vue'
 import SideNav from '@/components/SideNav.vue'
+import firebase from 'firebase'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'App',
@@ -21,6 +23,22 @@ export default {
     Header,
     SideNav,
     Footer
+  },
+  methods:{
+    ...mapActions(['setLoginUser','deleteLoginUser','fetchOrderItems','clearOrderItems'])
+  },
+  created(){
+    firebase.auth().onAuthStateChanged(user=>{
+      if(user){
+        this.setLoginUser(user);
+        this.fetchOrderItems();
+        this.$router.push('/').catch(() => {});      
+      }else{
+        this.deleteLoginUser();
+        this.clearOrderItems();
+        // this.$router.push('/').catch(() => {})
+      }
+    })
   }
-};
+}
 </script>

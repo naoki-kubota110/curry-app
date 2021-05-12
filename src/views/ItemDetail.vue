@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
 <v-container id="container">
 <v-layout row rap justify-center>
 <!--商品検索フォーム-->
@@ -77,3 +78,20 @@ export default {
   }
 }
 </style>
+=======
+<OrderForm></OrderForm>
+</template>
+
+<script>
+import OrderForm from '@/components/OrderForm.vue'
+export default {
+    components:{
+        OrderForm
+    },
+    data(){
+        return {
+        }
+    }
+}
+</script>
+>>>>>>> ee9b4afd317e36963586a36a950ca8c2ae0aaf00
