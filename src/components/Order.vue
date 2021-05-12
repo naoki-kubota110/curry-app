@@ -24,8 +24,8 @@
             <div>
               郵便番号
               <v-text-field
-                v-model="orderInfo.post"
-                :rules="postRules"
+                v-model="orderInfo.zip"
+                :rules="zipRules"
               >
               </v-text-field>
             </div>
@@ -88,7 +88,6 @@ export default {
       orderInfo: {
         status:1
       },
-
       valid: true,
       nameRules: [(v) => !!v || "名前を入力してください"],
       emailRules: [
@@ -98,7 +97,7 @@ export default {
             v
           ) || "メールアドレスの形式が不正です",
       ],
-      postRules: [
+      zipRules: [
         (v) => !!v || "郵便番号を入力してください",
         (v) =>
           /^\d{3}-\d{4}$/.test(v) ||
@@ -133,14 +132,10 @@ export default {
   methods: {
     ...mapActions(['orderConfirm']),
     submit() {
-      // if(this.orderInfo.name===undefined){
-      //   alert('名前を入力してください')
-      //   console.log('おk')
-      // }else{
       const inquiry = `この内容で注文します
       【お名前】${this.orderInfo.name}
       【メールアドレス】${this.orderInfo.email}
-      【郵便番号】${this.orderInfo.post}
+      【郵便番号】${this.orderInfo.zip}
       【住所】${this.orderInfo.address}
       【電話番号】${this.orderInfo.phone}
       【配達日】${this.orderInfo.date}
@@ -148,12 +143,25 @@ export default {
       【お支払い方法】${this.orderInfo.status}
       `;
       if(confirm(inquiry)){
-        const date = new Date()
-        console.log(date.getTime())
-        this.orderInfo.orderDate = date.getTime()
-        this.orderConfirm(this.orderInfo)
+        if(this.$store.getters.uid){
+          const date = new Date()
+          this.orderInfo.orderDate = date.getTime()
+          let obj = JSON.stringify(this.$store.state.cartItems)
+          obj = JSON.parse(obj)
+          obj.name = this.orderInfo.name
+          obj.email = this.orderInfo.email
+          obj.zip = this.orderInfo.zip
+          obj.address = this.orderInfo.address
+          obj.phone = this.orderInfo.phone
+          obj.date = this.orderInfo.date
+          obj.time = this.orderInfo.time
+          obj.status = this.orderInfo.status
+          obj.orderDate = this.orderInfo.orderDate
+          this.orderConfirm({order:obj})
+        }else{
+          this.$router.push('/')
+        }
       }
-      // }
     },
   },
 };

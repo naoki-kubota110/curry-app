@@ -33,7 +33,8 @@ export default new Vuex.Store({
   },
   getters:{
     uid:state=>state.login_user ? state.login_user.uid:null,
-    orderId:state=>state.cartItems ? state.cartItems.orderId:null
+    orderId:state=>state.cartItems ? state.cartItems.orderId:null,
+    orders:state=>state.orderedItems
   },
   mutations: {
     setLoginUser(state, user){
@@ -48,14 +49,12 @@ export default new Vuex.Store({
       state.cartItems = order
     },
     addItemToCartForNoUser(state,itemInfo){
-      console.log(itemInfo)
       let cartItems = state.cartItems
       cartItems.itemInfo.push(itemInfo)
     },
     addItemToOrderedItems(state,{orderId,order}){
       order.orderId = orderId
-      let a = state.orderedItems
-      a.push(order)
+      state.orderedItems.push(order)
     },
     clearCartItems(state){
       state.cartItems = null;
@@ -114,7 +113,6 @@ export default new Vuex.Store({
         const item = a.find(item => item.id === cartId)
         const index = a.indexOf(item)
         a.splice(index,1)
-        console.log(index)
         firebase.firestore().collection(`users/${getters.uid}/order`).doc(getters.orderId)
         .update({
           itemInfo:[...a]
@@ -184,6 +182,15 @@ export default new Vuex.Store({
               commit('addItemToOrderedItems',{orderId:doc.id,order:doc.data()})
             }
           })
+        })
+      }
+    },
+    orderConfirm({getters,commit},{order}){
+      if(getters.uid){
+        firebase.firestore().collection(`users/${getters.uid}/order`).doc(getters.orderId)
+        .update(order).then(()=>{
+          commit('addItemToOrderedItems',{orderId:order.orderId,order:order})
+          this.$router.push('/ordercomp')
         })
       }
     },
