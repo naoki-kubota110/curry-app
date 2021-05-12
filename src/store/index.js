@@ -28,26 +28,45 @@ export default new Vuex.Store({
       {id:17, name:'学芸会カレー', text:'みんな大好き！学芸会で作るような味を再現！定番のおいしさを味わえます', price:2440, subPrice:3650, img:'/img/17.jpg'},
       {id:18, name:'黄金に輝くチキンカレー', text:'カレーが黄金に輝く、超高級鶏肉を使用したカレーです', price:2700, subPrice:4050, img:'/img/18.jpg'},
     ],
-    cartItems:[]
+    cartItems:null,
+    orderedItems:[]
   },
   getters:{
-    uid:state => state.login_user ? state.login_user.uid:null,
+    uid:state=>state.login_user ? state.login_user.uid:null,
+    orderId:state=>state.cartItems ? state.cartItems.orderId:null
   },
   mutations: {
     setLoginUser(state, user){
       state.login_user = user;
     },
+    deleteCartItem(state,index){
+      let cartItems = state.cartItems;
+      cartItems.itemInfo.splice(index,1)
+    },
+    addItemToCart(state,{orderId,order}){
+      order.orderId = orderId
+      state.cartItems = order
+    },
+    addItemToOrderedItems(state,{orderId,order}){
+      order.orderId = orderId
+      state.orderedItems.push(order)
+    },
+    clearCartItems(state){
+      state.cartItems = null
+    },
+    clearOrderedItems(state){
+      state.orderedItems = null
+    },
     errorDelete(state){
       state.login_user = null;
     },
     deleteLoginUser(state){
-      state.login_user = '';
+      state.login_user = null;
     }
   },
   actions: {
     //ログアウト処理
-    logout({commit}){
-      commit('deleteLoginUser');
+    logout(){
       firebase.auth().signOut();
     },
     //ユーザー登録
@@ -62,16 +81,97 @@ export default new Vuex.Store({
     },
     //ログイン
     login({state,commit}, {email, password}){
-      firebase.auth().signInWithEmailAndPassword(email,password)
-      .then((user) => {
-        commit('setLoginUser', user);
-      }).catch((error) =>{
-        state.errorMsg = error.message;
+      firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+      .then(() => {
+        firebase.auth().signInWithEmailAndPassword(email,password)
+        .then((user) => {
+          commit('setLoginUser', user);
+        }).catch((error) =>{
+          state.errorMsg = error.message;
+        })
       })
     },
     errorDelete({commit}){
       commit('errorDelete');
     },
+    setLoginUser({commit},user){
+      commit('setLoginUser',user);
+    },
+    deleteLoginUser({commit}){
+      commit('deleteLoginUser');
+    },
+    deleteItemFromCart({state,getters,commit},{cartId}){
+      if(getters.uid){
+        let cartItems = state.cartItems
+        let a = JSON.stringify(cartItems.itemInfo)
+        a = JSON.parse(a)
+        const item = a.find(item => item.id === cartId)
+        const index = a.indexOf(item)
+        a.splice(index,1)
+        console.log(index)
+        firebase.firestore().collection(`users/${getters.uid}/order`).doc(getters.orderId)
+        .update({
+          itemInfo:[...a]
+        })
+        .then(()=>{
+            commit('deleteCartItem',index)
+        })
+      }
+    },
+    addItemToCart({state,getters,commit},{itemId,number}){
+      //一意の文字列を作成(itemごとのID用)
+      function getUniqueStr(myStrong){
+        var strong = 1000;
+        if (myStrong) strong = myStrong;
+        return new Date().getTime().toString(16)  + Math.floor(strong*Math.random()).toString(16)
+       }
+      let itemInfo = {id:getUniqueStr(),itemId:itemId,itemNum:number}
+      let order = {
+        userId:getters.uid,
+        itemInfo:[itemInfo],
+        status:0,
+      };
+      //ログインしているかのチェック
+      if(getters.uid){
+        //すでにカートが作成されている(status:0のorderがある)場合
+        if(getters.orderId){
+          let newCartItems = state.cartItems
+          newCartItems.itemInfo.push(itemInfo)
+          firebase.firestore().collection(`users/${getters.uid}/order`).doc(getters.orderId)
+          .update({
+            itemInfo:[...newCartItems.itemInfo]
+          }).then(()=>{
+            commit('addItemToCart',{orderId:getters.orderId,order:newCartItems})
+          })
+        //カートが未作成(status:0のorderがない)場合
+        }else if(getters.orderId===null){
+          firebase.firestore().collection(`users/${getters.uid}/order`).add(order).then(doc=>{
+            commit('addItemToCart',{orderId:doc.id,order:order})
+          })
+        }
+        //ログインしていない人がストアのカートに商品を追加できる処理(リロードで消える)
+      }else{
+          commit('addItemToCart',{order:order})
+      }
+    },
+    fetchOrderItems({getters,commit}){
+      if(getters.uid){
+        firebase.firestore().collection(`users/${getters.uid}/order`).get()
+        .then(snapShot=>{
+          snapShot.forEach(doc=>{
+            if(doc.data().status===0){
+              commit('addItemToCart',{orderId:doc.id,order:doc.data()})
+            }else{
+              commit('addItemToOrderedItems',{orderId:doc.id,order:doc.data()})
+            }
+          })
+        })
+      }
+    },
+    clearOrderItems({commit}){
+      commit('clearCartItems');
+      commit('clearOrderedItems');
+    }
   },
   modules: {
   }
