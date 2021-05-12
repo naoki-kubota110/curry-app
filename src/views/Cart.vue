@@ -1,5 +1,7 @@
 <template>
 <v-container>
+    <h1 v-if="show">ショッピングカート</h1>
+    <h1 v-else>注文内容確認</h1>
     <v-btn icon :to="{name:'ItemDetail'}">戻る</v-btn>
     <div v-if="cartLength">
     <v-data-table
@@ -23,9 +25,16 @@
             <td>{{item.price*item.itemNum}}円</td>
         </template>
         <template v-slot:[`item.delete`]="{ item }">
-            <v-btn @click="deleteConfirm(item.cartId)" color="error"><strong>削除</strong></v-btn>
+            <v-btn v-if="show" @click="deleteConfirm(item.cartId)" color="error"><strong>削除</strong></v-btn>
         </template>
     </v-data-table>
+    <div>
+        <h2>消費税：{{priceSum*tax}}円</h2>
+        <h2>ご注文金額合計：{{Math.floor(priceSum*(1+tax))}}円(税込)</h2>
+        <v-btn v-if="show" color="orange" dark @click="show=!show">注文に進む</v-btn>
+        <v-btn v-if="!show" @click="show=!show">カートに戻る</v-btn>
+    </div>
+    <Order v-show="!show"/>
     </div>
     <div v-else>
         <h1>商品はありません</h1>
@@ -33,8 +42,12 @@
 </v-container>
 </template>
 <script>
+import Order from '@/components/Order.vue'
 import {mapActions} from 'vuex'
 export default {
+    components:{
+        Order
+    },
     data(){
         return {
             headers:[
@@ -45,6 +58,8 @@ export default {
                 {text:'小計',value:'sum'},
                 {value:'delete',sortable:false},
             ],
+            tax:0.1,
+            show:true
         }
     },
     computed:{
@@ -85,6 +100,13 @@ export default {
             }else{
                 return false
             }
+        },
+        priceSum(){
+            let sum=0;
+            this.cartItems.forEach((item)=>{
+                sum += item.price;
+            })
+            return sum
         }
     },
     methods:{
@@ -92,6 +114,9 @@ export default {
         deleteConfirm(cartId){
             if(confirm('削除してもよろしいですか？'))
             this.deleteItemFromCart({cartId:cartId})
+        },
+        goToOrder(){
+
         }
     }
 }
