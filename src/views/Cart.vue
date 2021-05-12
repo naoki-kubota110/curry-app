@@ -1,5 +1,6 @@
 <template>
 <v-container>
+    <v-btn icon :to="{name:'ItemDetail'}">戻る</v-btn>
     <div v-if="cartLength">
     <v-data-table
     :headers="headers"
@@ -52,19 +53,21 @@ export default {
                 let itemData = this.$store.state.itemData;
                 let cartItems = this.$store.state.cartItems;
                 let itemInfo = cartItems.itemInfo;
+                console.log(itemInfo)
                 let array = [];
-
-                itemInfo.forEach((item1)=>{
-                    itemData.forEach((item2)=>{
-                        if(item1.itemId==item2.id){
-                            item2.itemNum = item1.itemNum
-                            item2.cartId = item1.id
-                            let a = JSON.stringify(item2)
+                itemInfo.forEach((itemIn)=>{
+                    itemData.forEach((itemD)=>{
+                        if(itemIn.itemId==itemD.id){
+                            itemD.itemNum = itemIn.itemNum
+                            itemD.cartId = itemIn.id
+                            console.log(itemD)
+                            let a = JSON.stringify(itemD)
                             a = JSON.parse(a)
                             array.push(a)
                         }
                     })
                 })
+                console.log(array)
                 return array
             }else {
                 return null
@@ -72,11 +75,15 @@ export default {
 
         },
         cartLength(){
-            let cartItems = this.$store.state.cartItems
-            if(cartItems.itemInfo.length===0){
-                return false
+            if(this.$store.state.cartItems){
+                let cartItems = this.$store.state.cartItems
+                if(cartItems.itemInfo.length===0){
+                    return false
+                }else{
+                    return true
+                }
             }else{
-                return true
+                return false
             }
         }
     },
