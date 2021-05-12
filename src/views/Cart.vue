@@ -1,6 +1,6 @@
 <template>
 <v-container>
-    <div v-if="cartItems">
+    <div v-if="cartLength">
     <v-data-table
     :headers="headers"
     :items="cartItems"
@@ -70,13 +70,21 @@ export default {
                 return null
             }
 
+        },
+        cartLength(){
+            let cartItems = this.$store.state.cartItems
+            if(cartItems.itemInfo.length===0){
+                return false
+            }else{
+                return true
+            }
         }
     },
     methods:{
         ...mapActions(['deleteItemFromCart']),
         deleteConfirm(cartId){
             if(confirm('削除してもよろしいですか？'))
-            this.deleteItemFromCart(cartId)
+            this.deleteItemFromCart({cartId:cartId})
         }
     }
 }
