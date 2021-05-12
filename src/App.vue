@@ -25,10 +25,6 @@ export default {
     Header,
     Search,
     SideNav,
-<<<<<<< HEAD
-    Footer,
-    
-=======
     Footer
   },
   methods:{
@@ -46,7 +42,6 @@ export default {
         this.$router.push('/').catch(() => {})
       }
     })
->>>>>>> 01a5295fcf5d8e80cc2439d802a69ea74c5f75b5
   }
 }
 </script>

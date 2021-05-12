@@ -29,11 +29,12 @@ export default new Vuex.Store({
       {id:18, name:'黄金に輝くチキンカレー', text:'カレーが黄金に輝く、超高級鶏肉を使用したカレーです', price:2700, subPrice:4050, img:'/img/18.jpg'},
     ],
     cartItems:null,
-    orderedItems:[]
+    orderedItems:[{itemId:2,itemNum:1}]
   },
   getters:{
     uid:state=>state.login_user ? state.login_user.uid:null,
-    orderId:state=>state.cartItems ? state.cartItems.orderId:null
+    orderId:state=>state.cartItems ? state.cartItems.orderId:null,
+    orderedItems:state => state.orderedItems ? state.orderedItems:null,
   },
   mutations: {
     setLoginUser(state, user){
@@ -171,7 +172,7 @@ export default new Vuex.Store({
     clearOrderItems({commit}){
       commit('clearCartItems');
       commit('clearOrderedItems');
-    }
+    },
   },
   modules: {
   }
