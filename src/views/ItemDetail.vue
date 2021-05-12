@@ -1,33 +1,30 @@
 <template>
 <v-container id="container">
 <v-layout row rap justify-center>
-<div class="section__title">
-    <div class="section__title-text">商品詳細</div>
-</div>
-
+<!--商品検索フォーム-->
+<div class="section__title-text">商品詳細</div>
 <v-row  class="item_contents" justify="center">
     <v-col class="item_contents">
-        <img :src="item.img" class="img-fluid" alt="画像" width="400" height="180">
+    <img :src="item.img" class="img-fluid" alt="画像" width="400" height="180">
     </v-col>
     <v-col  class="item_contents">
-        <p>{{item.name}}</p>
-        <p>{{item.text}}</p>
+    <p>{{item.name}}</p>
+    <p>{{item.text}}</p>
     </v-col>
 </v-row>
-
-        <div>        
-        <v-form>
-        <label for="inputResponsibleCompany">サイズ</label><br/>
-        <label class="radio-inline">
-        <input type="radio" name="responsibleCompany" checked="checked">
-        <span class="price">普通</span>&nbsp;&nbsp;{{item.price}}円（税抜）
-        </label>
-        <div>数量</div>
-        <input class='form-control' type='number' v-model='count' max="10" min="1"><br/>
-        <div>この商品金額：{{price}} 円(税抜)</div>
-        <v-btn color="green">カートに入れる</v-btn>
-        </v-form>
-        </div>
+    <div>        
+    <v-form>
+    <label for="inputResponsibleCompany">サイズ</label><br/>
+    <label class="radio-inline">
+    <input type="radio" name="responsibleCompany" checked="checked">
+    <span class="price">普通</span>&nbsp;&nbsp;{{item.price}}円（税抜）
+    </label>
+    <div>数量</div>
+    <input class='form-control' type='number' v-model='count' max="10" min="1"><br/>
+    <div>この商品の合計金額：{{price}} 円(税抜)</div>
+    <v-btn color="green">カートに入れる</v-btn>
+    </v-form>
+    </div>
 
 </v-layout>
 </v-container>
