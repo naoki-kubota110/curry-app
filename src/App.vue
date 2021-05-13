@@ -32,7 +32,7 @@ export default {
       if(user){
         this.setLoginUser(user);
         this.fetchOrderItems();
-        this.$router.push('/').catch(() => {});      
+        // this.$router.push('/').catch(() => {});      
       }else{
         this.deleteLoginUser();
         this.clearOrderItems();

@@ -37,7 +37,7 @@ const routes = [
     component: Login
   },
   {
-    path: '/orderComp',
+    path: '/ordercomp',
     name: 'OrderComp',
     component: OrderComp
   },
