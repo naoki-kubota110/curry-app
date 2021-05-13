@@ -29,12 +29,13 @@ export default new Vuex.Store({
       {id:18, name:'黄金に輝くチキンカレー', text:'カレーが黄金に輝く、超高級鶏肉を使用したカレーです', price:2700, subPrice:4050, img:'/img/18.jpg'},
     ],
     cartItems:null,
-    orderedItems:[{itemId:2,itemNum:1}]
+    orderedItems:[],
+    historyBox:[],
   },
   getters:{
     uid:state=>state.login_user ? state.login_user.uid:null,
     orderId:state=>state.cartItems ? state.cartItems.orderId:null,
-    orderedItems:state => state.orderedItems ? state.orderedItems:null,
+    historyBox:state => state.historyBox,
   },
   mutations: {
     setLoginUser(state, user){
@@ -57,6 +58,21 @@ export default new Vuex.Store({
       order.orderId = orderId
       let a = state.orderedItems
       a.push(order)
+      //履歴を作る処理
+      console.log(state.orderedItems[0])
+      state.orderedItems[0].itemInfo.forEach(item => {
+      let historyObj ={};
+      historyObj.name = state.itemData[item.itemId].name;
+      historyObj.text = state.itemData[item.itemId].text;
+      historyObj.price = state.itemData[item.itemId].price;
+      historyObj.img = state.itemData[item.itemId].img;
+      historyObj.id = item.id;
+      historyObj.itemId = item.itemId;
+      historyObj.itemNum = item.itemNum;
+      console.log(historyObj);
+      state.historyBox.push(historyObj);
+      });
+      console.log(state.historyBox);
     },
     clearCartItems(state){
       state.cartItems = null;
@@ -69,7 +85,7 @@ export default new Vuex.Store({
     },
     deleteLoginUser(state){
       state.login_user = null;
-    }
+    },
   },
   actions: {
     //ログアウト処理

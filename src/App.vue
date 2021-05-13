@@ -28,20 +28,22 @@ export default {
     Footer
   },
   methods:{
-    ...mapActions(['setLoginUser','deleteLoginUser','fetchOrderItems','clearOrderItems'])
+    ...mapActions(['setLoginUser','deleteLoginUser','fetchOrderItems','clearOrderItems','makeHistory'])
   },
   created(){
     firebase.auth().onAuthStateChanged(user=>{
       if(user){
         this.setLoginUser(user);
         this.fetchOrderItems();
-        this.$router.push('/').catch(() => {});      
+        // this.$router.push('/').catch(() => {});      
       }else{
         this.deleteLoginUser();
         this.clearOrderItems();
         // this.$router.push('/').catch(() => {})
       }
-    })
+    });
+  },
+  mounted(){
   }
 }
 </script>
