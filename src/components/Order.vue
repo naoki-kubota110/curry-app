@@ -97,21 +97,14 @@ export default {
       addressRules: [v => !!v || "住所を入力してください"],
       phoneRules: [
         (v) => !!v || "電話番号を入力してください",
-        (v) =>
+        (v) => 
           /^\d{2,5}-\d{1,4}-\d{4}$/.test(v) ||
           "電話番号はXXXX-XXXX-XXXXの形式で入力してください",
       ],
       dateRules:[v => !!v || '配達日を入力してください',],
       timeRules: [
         (v) => !!v || "配達日時を選択してください",
-        // v => {
-        //   let today = new Date()
-        //   let hours = today.getHours()+4
-        //   if(v<hours){
-        //     return 
-        //   }
-        // }
-        //  || "配達日時を選択してください"
+        v => this.timeCheck(v) || "この時間には配達できません"
       ],
       payRules: [(v) => !!v || "お支払い方法を選択してください"],
       pay: {},
@@ -190,7 +183,34 @@ export default {
       )
       return today <= new Date(val) && new Date(val) <= maxAllowedDay
      },
-
+     timeCheck(selectedTime){
+       let date = new Date()
+       let year = date.getFullYear()
+       let month = date.getMonth()+1
+       let day = date.getDate()
+       let nowHour = date.getHours()
+       let today = `${year}-0${month}-${day}`
+       let selectedDay = this.orderInfo.date
+       let nowMinute = date.getMinutes()
+       if(30<nowMinute){
+         nowHour++
+       }
+       let a = Math.abs(selectedTime-nowHour)
+       //入力値が今日の
+       if(selectedDay === today){
+         //現在時刻前だった場合
+         if(selectedTime <= nowHour){
+           return false
+          //入力値の3時間後が18時を超えてしまう場合
+         }else if( 18 < selectedTime+3){
+           return false
+         }else if( 3 <= a ){
+           return true
+         }
+       }else{
+         return true
+       }
+     }
   },
 };
 </script>

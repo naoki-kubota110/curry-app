@@ -14,27 +14,27 @@
   商品名<br/>
   <input height="3" type="text" placeholder="Search" v-model="search_term" aria-label="Search" />&nbsp;&nbsp;
   <v-btn color="primary" medium v-on:click.prevent="getArticles()">検索</v-btn>&nbsp;
-  <v-btn color="secondary" medium outlined v-on:click="removetext()">クリア</v-btn>
+  <v-btn color="secondary" medium v-on:click="removetext()">クリア</v-btn>
 </v-sheet>
 </v-flex>
 
-    
-
  <!--showがfalseの時にメッセージ表示-->
-<div v-if="show">該当する商品がありません</div>
-<v-row>
-<v-col cols="4" v-for="(search, index) in changeView" :key="index">
-  <v-card>
-      <router-link :to="{name:'ItemDetail',params:{item_id:search.id}}">
-      <v-img :src="search.img"></v-img>
-      </router-link>
-      <v-card-title>
-        <router-link :to="{name:'ItemDetail',params:{item_id:search.id}}">{{search.name}}</router-link>
-      </v-card-title>
-      <v-card-text>&nbsp;普通:&nbsp;{{search.price}}円(税抜き)</v-card-text>
-  </v-card>
-</v-col>
-</v-row>
+  <v-row>
+    <div v-if="show">該当する商品がありません</div>
+    <v-col cols="4" v-for="(search, index) in changeView" :key="index">
+      <v-card id="item">
+          <router-link :to="{name:'ItemDetail',params:{item_id:search.id}}">
+          <v-img :src="search.img" id="img"></v-img>
+          </router-link>
+          <v-card-title>
+            <router-link :to="{name:'ItemDetail',params:{item_id:search.id}}" id="itemName">{{search.name}}</router-link>
+          </v-card-title>
+          <v-card-text>
+            普通:<span id="price">{{search.price}}</span>円(税抜き)
+          </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
 </v-container>
 </template>
 <script>

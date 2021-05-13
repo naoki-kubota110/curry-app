@@ -1,9 +1,6 @@
 <template>
 <v-app>
-  <v-flex xs12 class="ma-12" jsutify-center>
-    <SearchForm></SearchForm>
-  </v-flex>
-<v-container>
+  <SearchForm></SearchForm>
   <v-container v-if="$store.state.flag" class="my-50" justify-center>
     <v-row>
       <v-col cols="4" v-for="(item,index) in itemData" :key="index">
@@ -23,14 +20,13 @@
           <!-- 金額 -->
           <div>
           <v-card-text>
-            普通:<span id="price">{{item.price}}</span>円(税抜き)<br/>
+            普通:<span id="price">{{item.price}}</span>円(税抜き)
           </v-card-text>
           </div>
         </v-card>
       </v-col>
     </v-row>
   </v-container>
-</v-container>
 </v-app>
 </template>
 
@@ -51,7 +47,7 @@ export default {
   }),
 }
 </script>
-<style scoped>
+<style>
 #img{
  height:200px;
  width:300px;
