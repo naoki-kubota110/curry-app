@@ -20,8 +20,8 @@
         <input type="radio" name="responsibleCompany" checked="checked">
         <span>  普通 &nbsp;&nbsp;&nbsp;{{item.price}}円（税抜）</span><br/>
         </label ><br/>
-        <span style="font-weight : bold">数量</span>
-        <span style="color:red;">該当する商品がありません</span>
+        <span style="font-weight : bold">数量：</span>
+        <span style="color:red; font-weight: bold">数量を選択してください</span>
         <v-text-field
         width="10"
         v-model="number"
