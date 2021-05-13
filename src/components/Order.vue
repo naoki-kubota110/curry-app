@@ -12,11 +12,15 @@
               メールアドレス<v-text-field v-model="orderInfo.email" :rules="emailRules"></v-text-field>
             </div>
             <div>
-              郵便番号<v-text-field v-model="orderInfo.zip" :rules="zipRules"></v-text-field>
-              <v-btn @click="addressAutoComplete">自動入力</v-btn>
+              郵便番号
+              <v-text-field v-model="orderInfo.zip" :rules="zipRules">
+                <template v-slot:append-outer>
+                  <v-btn icon @click="addressAutoComplete()"><v-icon>mdi-magnify</v-icon></v-btn>
+                </template>
+              </v-text-field>
             </div>
             <div>
-              住所<v-text-field v-model="orderInfo.address" :rules="addressRules"></v-text-field>
+              住所<v-text-field v-model="orderInfo.address" :rules="addressRules">{{addressComp}}</v-text-field>
             </div>
             <div>
               電話番号<v-text-field v-model="orderInfo.phone" :rules="phoneRules"></v-text-field>
@@ -26,9 +30,7 @@
               <small>日付</small>
               <v-menu
               ref="menu"
-              v-model="menu"
               :close-on-content-click="false"
-              :return-value.sync="date"
               transition="scale-transition"
               offset-y
               min-width="290px"
@@ -36,7 +38,6 @@
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     v-model="orderInfo.date"
-                    prepend-icon=""
                     readonly
                     v-on="on"
                     :rules="dateRules"
@@ -45,7 +46,7 @@
                 </template>
                 <v-date-picker v-model="orderInfo.date" :allowed-dates="allowedDate" no-title scrollable>
                   <v-spacer></v-spacer>
-                  <v-btn text color="orange" @click="$refs.menu.save(date)">OK</v-btn>
+                  <v-btn text color="orange" @click="$refs.menu.save()">OK</v-btn>
                 </v-date-picker>
               </v-menu>
               <small>時間</small>
@@ -79,6 +80,7 @@ export default {
   data() {
     return {
       orderInfo: {
+        address:'',
         status:1
       },
       valid: true,
@@ -122,6 +124,11 @@ export default {
         {text:'18時',value:18},
       ],
     };
+  },
+  computed:{
+    addressComp(){
+      return this.orderInfo.address
+    }
   },
   methods: {
     ...mapActions(['orderConfirm']),
@@ -212,16 +219,17 @@ export default {
        }else{
          return true
        }
-     }
-  },
-  addressAutoComplete(){
-      axios.get(`https://api.zipaddress.net/?zipcode=${this.orderInfo.zip}`)
-      .then(res=>{
-          this.orderInfo.address+=res.data.data.pref
-          this.orderInfo.address+=res.data.data.city
-          this.orderInfo.address+=res.data.data.town
-          console.log(this.orderInfo.address)
-      })
-  },
+     },
+    addressAutoComplete(){
+      if(this.orderInfo.zip){
+        axios.get(`https://api.zipaddress.net/?zipcode=${this.orderInfo.zip}`)
+        .then(res=>{
+            this.orderInfo.address = res.data.data.fullAddress
+        })
+      }else{
+        this.orderInfo.zip = ''
+      }
+    },
+  }
 };
 </script>

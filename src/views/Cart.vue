@@ -1,8 +1,8 @@
 <template>
-<v-app>
-    <h1 v-if="show" id="cart" style="margin-bottom:10px;">ショッピングカート</h1>
-    <h1 v-else style="margin-bottom: 10px;">注文内容確認</h1>
-    <v-container v-if="cartLength">
+<v-container>
+    <h1 v-if="show" id="cart">ショッピングカート</h1>
+    <h1 v-else>注文内容確認</h1>
+    <div v-if="cartLength">
         <v-row>
             <v-col>
                 <v-data-table
@@ -43,11 +43,11 @@
         <div id="orderForm">
         <Order v-show="!show"/>
         </div>
-    </v-container>
+    </div>
     <div v-else>
         <h3>商品はありません</h3>
     </div>
-</v-app>
+</v-container>
 </template>
 <script>
 import Order from '@/components/Order.vue'

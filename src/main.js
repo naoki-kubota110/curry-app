@@ -8,8 +8,7 @@ import axios from 'axios'
 
 Vue.config.productionTip = false
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+//firebase
 var firebaseConfig = {
   apiKey: "AIzaSyBSvIZd_mesFKv7YPq479FpIAWRE8hWu5E",
   authDomain: "curry-app-3e233.firebaseapp.com", 
