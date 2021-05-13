@@ -32,8 +32,7 @@
             </v-col>
         </v-row>
         <v-row class="ma-2">
-            <v-spacer></v-spacer>
-            <v-col cols="6" align="right">
+            <v-col align="center">
                 <h2>消費税：{{(priceSum*tax).toLocaleString('ja-JP')}}円</h2>
                 <h2>ご注文金額合計：{{(Math.floor(priceSum+(priceSum*tax)).toLocaleString('ja-JP'))}}円(税込)</h2>
                 <v-btn v-if="show" color="orange" dark @click="loginCheck()" rounded href="#orderForm">注文に進む</v-btn>

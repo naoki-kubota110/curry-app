@@ -58,13 +58,15 @@
               v-model="orderInfo.status"
               :rules="payRules"
             >
-              <v-radio label="代金引換" :value="1"></v-radio>
-              <v-radio label="クレジットカード" :value="2"></v-radio>
+              <v-radio label="代金引換" :value="1" color="warning"></v-radio>
+              <v-radio label="クレジットカード" :value="2" color="warning"></v-radio>
             </v-radio-group>
-            <v-row>
-              <v-col>
-                <v-btn rounded>リセット</v-btn>
-                <v-btn @click="submit" rounded class="orange">この内容で注文する</v-btn>
+            <v-row justify="center">
+              <v-col cols="4" align="center">
+                <v-btn rounded @click="orderInfo={address:'',status:1}">リセット</v-btn>
+              </v-col>
+              <v-col cols="4">
+                <v-btn @click="submit" rounded class="orange" dark>注文する</v-btn>
               </v-col>
             </v-row>
           </v-form>
@@ -128,6 +130,13 @@ export default {
   computed:{
     addressComp(){
       return this.orderInfo.address
+    },
+    paymentMethod(){
+      if(this.orderInfo.status===1){
+        return '代金引換'
+      }else{
+        return 'クレジットカード'
+      }
     }
   },
   methods: {
@@ -141,7 +150,7 @@ export default {
       【電話番号】${this.orderInfo.phone}
       【配達日】${this.orderInfo.date}
       【配達時刻】${this.orderInfo.time} 時
-      【お支払い方法】${this.orderInfo.status}
+      【お支払い方法】${this.paymentMethod}
       `;
       if(confirm(inquiry)){
         if(this.$refs.form.validate()){
@@ -224,7 +233,9 @@ export default {
       if(this.orderInfo.zip){
         axios.get(`https://api.zipaddress.net/?zipcode=${this.orderInfo.zip}`)
         .then(res=>{
-            this.orderInfo.address = res.data.data.fullAddress
+          this.orderInfo.address = res.data.data.fullAddress
+        }).catch(()=>{
+          this.orderInfo.zip = ''
         })
       }else{
         this.orderInfo.zip = ''

@@ -3,11 +3,11 @@
   <SearchForm></SearchForm>
   <v-container v-if="$store.state.flag" class="my-50" justify-center>
     <v-row>
-      <v-col cols="4" v-for="(item,index) in itemData" :key="index">
+      <v-col cols="4" v-for="(item,index) in itemData" :key="index" align="center">
         <v-card id="item" elevation="5">
             <div>
               <router-link :to="{name:'ItemDetail',params:{item_id:item.id}}">
-                <v-img :src="item.img" id="img" class="gray lighten-2"></v-img>
+                  <v-img :src="item.img" id="img" class="gray lighten-2"></v-img>
               </router-link>
             </div>
             <div>
@@ -18,7 +18,7 @@
             <v-row>
               <v-spacer></v-spacer>
               <v-col cols="9">
-                <div>普通 : <span id="price">{{item.price.toLocaleString('ja-JP')}}</span>円(税抜き)</div>
+                <div>普通 : <span id="price">{{item.price.toLocaleString('ja-JP')}}</span>円(税抜)</div>
               </v-col>
             </v-row>
         </v-card>
@@ -51,12 +51,14 @@ export default {
  width:300px;
  border-bottom: solid 0.5px gray;
  border-radius:10px 10px 0 0;
+ background-color: white;
 }
 #item{
   height:325px;
   width:300px;
   border-radius: 10px;
   border: solid 0.5px gray;
+  background-color: antiquewhite;
 }
 #price{
   font-size: 25px;
@@ -65,11 +67,10 @@ export default {
   color:black;
   text-decoration: none;
   font-size: 18px;
-  font-weight:500;
+  font-weight:bold;
 }
 #itemName:hover{
   color:orange;
-  font-weight:900;
 }
 </style>
 	

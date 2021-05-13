@@ -24,7 +24,7 @@
 <div v-if="show" align="center" style="font-size:20px; font-weight: bold" class="ma-10">該当する商品がありません</div>       
 <!--showがfalseの時にメッセージ表示-->
 <v-row>
-<v-col cols="4" v-for="(search, index) in changeView" :key="index">
+<v-col cols="4" v-for="(search, index) in changeView" :key="index" align="center">
   <v-card id="item" elevation="5">
     <div>
       <router-link :to="{name:'ItemDetail',params:{item_id:search.id}}">
