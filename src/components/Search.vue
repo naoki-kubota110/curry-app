@@ -1,6 +1,33 @@
 <template>
 <v-container>
-<v-flex justify-center>
+
+    <v-app>
+        <v-row justify="center">
+            <v-col cols="12" sm="10" md="8" lg="6">
+                <v-card>
+                    <v-card-title>商品を検索する</v-card-title>
+                    <v-divider></v-divider>
+                    <p>商品名</p>
+                    <p style="color:red;" v-if="$store.state.errorMsg">
+                        <strong>{{$store.state.errorMsg}}</strong>
+                    </p>
+                    <v-card-text>
+                        <v-form>
+                            <v-text-field v-model="search_term"
+                                        prepend-inner-icon="mdi-search" 
+                                        type="text" 
+                                        label="Search"/>
+                            <v-btn color="primary" @click="getArticles()">検索</v-btn>&nbsp;
+                            <v-btn color="primary" outlined @click="removetext()">クリア</v-btn>
+                        </v-form>
+                    </v-card-text>
+                </v-card>
+                <p v-if="show" style="color:red;">該当する商品がありません</p>
+            </v-col>
+        </v-row>
+    </v-app>
+
+<v-app>
 <v-sheet
   color="white"
   elevation="3"
@@ -16,7 +43,7 @@
   <v-btn color="primary" medium v-on:click.prevent="getArticles()">検索</v-btn>&nbsp;
   <v-btn color="secondary" medium outlined v-on:click="removetext()">クリア</v-btn>
 </v-sheet>
-</v-flex>
+</v-app>
 
     
 
