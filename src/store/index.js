@@ -34,7 +34,6 @@ export default new Vuex.Store({
   getters:{
     uid:state=>state.login_user ? state.login_user.uid:null,
     orderId:state=>state.cartItems ? state.cartItems.orderId:null,
-    orders:state=>state.orderedItems
   },
   mutations: {
     setLoginUser(state, user){
