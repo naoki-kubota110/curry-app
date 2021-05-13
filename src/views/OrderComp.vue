@@ -5,12 +5,7 @@
   <p>この度はご注文ありがとうございます。</p>
   <p>お支払い先は、お送りしたメールに記載してありますのでご確認ください。</p>
   <p>メールが届かない場合は「注文履歴」からご確認ください。</p>
-  <v-btn
-      depressed
-      color="red"
-    >
-      トップ画面を表示する
-    </v-btn>
+  <v-btn dark rounded class="orange" :to="{name:'Home'}">トップ画面を表示する</v-btn>
 </v-col>
 </v-row>
 </template>
