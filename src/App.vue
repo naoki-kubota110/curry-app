@@ -17,6 +17,7 @@ import SideNav from '@/components/SideNav.vue'
 import firebase from 'firebase'
 import { mapActions } from 'vuex'
 
+
 export default {
   name: 'App',
   components:{
@@ -38,7 +39,9 @@ export default {
         this.clearOrderItems();
         this.$router.push('/').catch(() => {})
       }
-    })
+    });
+  },
+  mounted(){
   }
 }
 </script>
