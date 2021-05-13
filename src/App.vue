@@ -11,6 +11,7 @@
 </template>
 
 <script>
+
 import Header from '@/components/Header.vue'
 import Search from '@/components/Search.vue'
 import Footer from '@/components/Footer.vue'

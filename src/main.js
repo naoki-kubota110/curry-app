@@ -11,7 +11,7 @@ Vue.config.productionTip = false
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 var firebaseConfig = {
   apiKey: "AIzaSyBSvIZd_mesFKv7YPq479FpIAWRE8hWu5E",
-  authDomain: "curry-app-3e233.firebaseapp.com",
+  authDomain: "curry-app-3e233.firebaseapp.com", 
   projectId: "curry-app-3e233",
   storageBucket: "curry-app-3e233.appspot.com",
   messagingSenderId: "2817963061",
