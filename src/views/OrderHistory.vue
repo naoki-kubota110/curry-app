@@ -1,25 +1,46 @@
 <template>
-    <div>
-        <v-container v-for="(item, index) in historyBox" :key="index">
-        {{item}}
-    </v-container>
-    <button @click="showHistory">ボタン</button>
+<v-container>
+    <div v-for ="itemInfo,index in orderedItemsInfo" :key="index">{{itemInfo.num}}</div>
+<!-- <div v-for="order,index in orderedItems" :key="index">
+    <div v-for="itemInfo,index in order.itemInfo" :key="index">
+        <div>id:{{itemInfo.id}}</div>
+        <div>num:{{itemInfo.itemNum}}</div>
+        <div>itemId:{{itemInfo.itemId}}</div>
     </div>
+</div> -->
+</v-container>
 </template>
-
 <script>
-import {mapGetters} from 'vuex'
-
 export default {
-    name:'OrderHistory',
-    methods:{
-        showHistory(){
-            console.log(this.$store.state.historyBox)
+    data(){
+        return{
+
         }
     },
     computed:{
-        ...mapGetters(["historyBox"]),
+        orderedItemsInfo(){
+            if(this.$store.state.orderedItems){
+                let itemData = this.$store.state.itemData;
+                let ordereditems = this.$store.state.orderedItems;
+                let array = []
+                ordereditems.forEach((order)=>{
+                    order.itemInfo.forEach((info)=>{
+                        itemData.forEach((item)=>{
+                            if(info.itemId==item.id){
+                                item.num = info.itemNum
+                                item.orderId = info.id
+                                let a = JSON.stringify(item)
+                                a = JSON.parse(a)
+                                array.push(a)
+                            }
+                        })
+                    })
+                })
+                return array
+            }else{
+                return []
+            }
+        },
     }
-
 }
 </script>

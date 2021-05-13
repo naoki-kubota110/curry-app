@@ -35,7 +35,6 @@ export default new Vuex.Store({
   getters:{
     uid:state=>state.login_user ? state.login_user.uid:null,
     orderId:state=>state.cartItems ? state.cartItems.orderId:null,
-    historyBox:state => state.historyBox,
   },
   mutations: {
     setLoginUser(state, user){
@@ -50,29 +49,12 @@ export default new Vuex.Store({
       state.cartItems = order
     },
     addItemToCartForNoUser(state,itemInfo){
-      console.log(itemInfo)
       let cartItems = state.cartItems
       cartItems.itemInfo.push(itemInfo)
     },
     addItemToOrderedItems(state,{orderId,order}){
       order.orderId = orderId
-      let a = state.orderedItems
-      a.push(order)
-      //履歴を作る処理
-      console.log(state.orderedItems[0])
-      state.orderedItems[0].itemInfo.forEach(item => {
-      let historyObj ={};
-      historyObj.name = state.itemData[item.itemId].name;
-      historyObj.text = state.itemData[item.itemId].text;
-      historyObj.price = state.itemData[item.itemId].price;
-      historyObj.img = state.itemData[item.itemId].img;
-      historyObj.id = item.id;
-      historyObj.itemId = item.itemId;
-      historyObj.itemNum = item.itemNum;
-      console.log(historyObj);
-      state.historyBox.push(historyObj);
-      });
-      console.log(state.historyBox);
+      state.orderedItems.push(order)
     },
     clearCartItems(state){
       state.cartItems = null;
@@ -131,7 +113,6 @@ export default new Vuex.Store({
         const item = a.find(item => item.id === cartId)
         const index = a.indexOf(item)
         a.splice(index,1)
-        console.log(index)
         firebase.firestore().collection(`users/${getters.uid}/order`).doc(getters.orderId)
         .update({
           itemInfo:[...a]
@@ -201,6 +182,15 @@ export default new Vuex.Store({
               commit('addItemToOrderedItems',{orderId:doc.id,order:doc.data()})
             }
           })
+        })
+      }
+    },
+    orderConfirm({getters,commit},{order}){
+      if(getters.uid){
+        firebase.firestore().collection(`users/${getters.uid}/order`).doc(getters.orderId)
+        .update(order).then(()=>{
+          commit('addItemToOrderedItems',{orderId:order.orderId,order:order})
+          this.$router.push('/ordercomp')
         })
       }
     },
