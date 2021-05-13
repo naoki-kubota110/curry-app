@@ -13,6 +13,7 @@
             </div>
             <div>
               郵便番号<v-text-field v-model="orderInfo.zip" :rules="zipRules"></v-text-field>
+              <v-btn @click="addressAutoComplete">自動入力</v-btn>
             </div>
             <div>
               住所<v-text-field v-model="orderInfo.address" :rules="addressRules"></v-text-field>
@@ -72,6 +73,7 @@
   </v-app>
 </template>
 <script>
+import axios from 'axios'
 import {mapActions} from 'vuex'
 export default {
   data() {
@@ -211,6 +213,15 @@ export default {
          return true
        }
      }
+  },
+  addressAutoComplete(){
+      axios.get(`https://api.zipaddress.net/?zipcode=${this.orderInfo.zip}`)
+      .then(res=>{
+          this.orderInfo.address+=res.data.data.pref
+          this.orderInfo.address+=res.data.data.city
+          this.orderInfo.address+=res.data.data.town
+          console.log(this.orderInfo.address)
+      })
   },
 };
 </script>
