@@ -26,7 +26,7 @@ export default {
     Footer
   },
   methods:{
-    ...mapActions(['setLoginUser','deleteLoginUser','fetchOrderItems','clearOrderItems','makeHistory'])
+    ...mapActions(['setLoginUser','deleteLoginUser','fetchOrderItems','clearOrderItems'])
   },
   created(){
     firebase.auth().onAuthStateChanged(user=>{
