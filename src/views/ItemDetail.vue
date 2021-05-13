@@ -1,7 +1,7 @@
 <template>
 <v-container id="container">
     <v-layout row rap justify-center>
-    <div class="section__title-text">商品詳細</div>
+    <h2>商品詳細</h2>
     <v-row  class="item_contents" justify="center">
         <v-col class="item_contents">
         <img :src="item.img" class="img-fluid" alt="画像" width="400" height="180">
