@@ -157,7 +157,9 @@ export default {
           obj.time = this.orderInfo.time
           obj.status = this.orderInfo.status
           obj.orderDate = this.orderInfo.orderDate
-          this.orderConfirm({order:obj})
+          this.orderConfirm({order:obj}).then(()=>{
+            this.$router.push('/ordercomp')
+          })
         }else{
           this.$router.push('/')
         }

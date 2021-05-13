@@ -2,7 +2,6 @@
 <v-container>
     <h1 v-if="show" id="cart">ショッピングカート</h1>
     <h1 v-else>注文内容確認</h1>
-    <v-btn icon :to="{name:'ItemDetail'}">戻る</v-btn>
     <div v-if="cartLength">
     <v-data-table
     :headers="headers"
