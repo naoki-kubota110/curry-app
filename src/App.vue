@@ -23,7 +23,7 @@ export default {
   components:{
     Header,
     SideNav,
-    Footer
+    Footer,
   },
   methods:{
     ...mapActions(['setLoginUser','deleteLoginUser','fetchOrderItems','clearOrderItems'])

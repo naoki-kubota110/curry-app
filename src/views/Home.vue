@@ -4,25 +4,23 @@
   <v-container v-if="$store.state.flag" class="my-50" justify-center>
     <v-row>
       <v-col cols="4" v-for="(item,index) in itemData" :key="index">
-        <v-card id="item">
-          <!-- 画像 -->
-          <div>
-            <router-link :to="{name:'ItemDetail',params:{item_id:item.id}}">
-              <v-img :src="item.img" id="img"></v-img>
-            </router-link>
-          </div>
-          <!-- タイトルなど -->
-          <div>
-            <v-card-title>
-              <router-link :to="{name:'ItemDetail',params:{item_id:item.id}}" id="itemName">{{item.name}}</router-link>
-            </v-card-title>
-          </div>
-          <!-- 金額 -->
-          <div>
-          <v-card-text>
-            普通:<span id="price">{{item.price}}</span>円(税抜き)
-          </v-card-text>
-          </div>
+        <v-card id="item" elevation="5">
+            <div>
+              <router-link :to="{name:'ItemDetail',params:{item_id:item.id}}">
+                <v-img :src="item.img" id="img" class="gray lighten-2"></v-img>
+              </router-link>
+            </div>
+            <div>
+              <v-card-title>
+                <router-link :to="{name:'ItemDetail',params:{item_id:item.id}}" id="itemName">{{item.name}}</router-link>
+              </v-card-title>
+            </div>
+            <v-row>
+              <v-spacer></v-spacer>
+              <v-col cols="9">
+                <div>普通 : <span id="price">{{item.price.toLocaleString('ja-JP')}}</span>円(税抜き)</div>
+              </v-col>
+            </v-row>
         </v-card>
       </v-col>
     </v-row>
@@ -51,21 +49,27 @@ export default {
 #img{
  height:200px;
  width:300px;
- border-bottom: solid 1px rgb(161, 159, 159);
- border-radius:30px 30px 0 0;
+ border-bottom: solid 0.5px gray;
+ border-radius:10px 10px 0 0;
 }
 #item{
-  height:350px;
+  height:325px;
   width:300px;
-  border-radius: 30px;
-  border: solid 0.5px;
+  border-radius: 10px;
+  border: solid 0.5px gray;
 }
 #price{
   font-size: 25px;
 }
 #itemName{
-  color: black;
+  color:black;
   text-decoration: none;
+  font-size: 18px;
+  font-weight:500;
+}
+#itemName:hover{
+  color:orange;
+  font-weight:900;
 }
 </style>
 	
