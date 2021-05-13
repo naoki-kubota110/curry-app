@@ -1,7 +1,7 @@
 <template>
 <v-container>
 <v-layout row rap justify-center>
-    <h2>商品詳細</h2>
+    <h1>商品詳細</h1>
     <v-row justify="center" class="ma-5">
         <v-col justify="center" align="center">
             <v-card flat>
@@ -21,7 +21,7 @@
         <span>  普通 &nbsp;&nbsp;&nbsp;{{item.price}}円（税抜）</span><br/>
         </label ><br/>
         <span style="font-weight : bold">数量</span>
-
+        <span style="color:red;">該当する商品がありません</span>
         <v-text-field
         width="10"
         v-model="number"
@@ -51,9 +51,7 @@ export default {
         }
     },
     created(){
-        //let items = this.$store.state.items;
         let paramId = this.$route.params.item_id;
-        console.log(this.items);
         this.items.forEach(item => {
             if(item.id===paramId){
                 this.item = item

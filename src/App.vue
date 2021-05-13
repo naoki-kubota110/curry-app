@@ -17,6 +17,7 @@ import SideNav from '@/components/SideNav.vue'
 import firebase from 'firebase'
 import { mapActions } from 'vuex'
 
+
 export default {
   name: 'App',
   components:{
@@ -32,13 +33,15 @@ export default {
       if(user){
         this.setLoginUser(user);
         this.fetchOrderItems();
-        // this.$router.push('/').catch(() => {});      
+        this.$router.push('/').catch(() => {});      
       }else{
         this.deleteLoginUser();
         this.clearOrderItems();
-        // this.$router.push('/').catch(() => {})
+        this.$router.push('/').catch(() => {})
       }
-    })
+    });
+  },
+  mounted(){
   }
 }
 </script>

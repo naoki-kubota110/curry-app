@@ -1,6 +1,5 @@
 <template>
 <v-container>
-
     <v-app>
         <v-row justify="center">
             <v-col cols="12" sm="10" md="8" lg="6">
@@ -26,7 +25,6 @@
             </v-col>
         </v-row>
     </v-app>
-
 <v-app>
 <v-sheet
   color="white"
@@ -38,7 +36,7 @@
   <sheet-header>
   <v-sheet color="grey lighten-2" tile class="pa-1">商品を検索する</v-sheet>
   </sheet-header>
-  商品名<br/>
+  商品名
   <input height="3" type="text" placeholder="Search" v-model="search_term" aria-label="Search" />&nbsp;&nbsp;
   <v-btn color="primary" medium v-on:click.prevent="getArticles()">検索</v-btn>&nbsp;
   <v-btn color="secondary" medium outlined v-on:click="removetext()">クリア</v-btn>
