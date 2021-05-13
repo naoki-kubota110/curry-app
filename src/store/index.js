@@ -56,6 +56,7 @@ export default new Vuex.Store({
     addItemToOrderedItems(state,{orderId,order}){
       order.orderId = orderId
       state.orderedItems.push(order)
+      state.cartItems = null
     },
     clearCartItems(state){
       state.cartItems = null;
@@ -191,7 +192,6 @@ export default new Vuex.Store({
         firebase.firestore().collection(`users/${getters.uid}/order`).doc(getters.orderId)
         .update(order).then(()=>{
           commit('addItemToOrderedItems',{orderId:order.orderId,order:order})
-          this.$router.push('/ordercomp')
         })
       }
     },

@@ -50,9 +50,7 @@ export default {
         }
     },
     created(){
-        //let items = this.$store.state.items;
         let paramId = this.$route.params.item_id;
-        console.log(this.items);
         this.items.forEach(item => {
             if(item.id===paramId){
                 this.item = item
