@@ -30,7 +30,7 @@
     <div>
         <h2>消費税：{{priceSum*tax}}円</h2>
         <h2>ご注文金額合計：{{Math.floor(priceSum+(priceSum*tax))}}円(税込)</h2>
-        <v-btn v-if="show" color="orange" dark @click="show=!show" rounded href="#orderForm">注文に進む</v-btn>
+        <v-btn v-if="show" color="orange" dark @click="loginCheck()" rounded href="#orderForm">注文に進む</v-btn>
         <v-btn v-if="!show" @click="show=!show" rounded>カートに戻る</v-btn>
     </div>
     <div id="orderForm">
@@ -107,6 +107,13 @@ export default {
         }
     },
     methods:{
+        loginCheck(){
+            if(this.$store.getters.uid){
+                this.show = !this.show
+            }else{
+                this.$router.push('/login')
+            }
+        },
         ...mapActions(['deleteItemFromCart']),
         deleteConfirm(cartId){
             if(confirm('削除してもよろしいですか？'))

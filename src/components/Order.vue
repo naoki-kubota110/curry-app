@@ -162,7 +162,7 @@ export default {
               this.$router.push('/ordercomp')
             })
           }else{
-            this.$router.push('/')
+            this.$router.push('/login')
           }
         }else{
           this.success = false;
