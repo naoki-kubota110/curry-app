@@ -30,7 +30,7 @@ export default new Vuex.Store({
     ],
     flag: true,
     cartItems:null,
-    orderedItems:[]
+    orderedItems:[],
   },
   getters:{
     uid:state=>state.login_user ? state.login_user.uid:null,
@@ -68,7 +68,7 @@ export default new Vuex.Store({
     },
     deleteLoginUser(state){
       state.login_user = null;
-    }
+    },
   },
   actions: {
     //ログアウト処理
@@ -197,7 +197,7 @@ export default new Vuex.Store({
     clearOrderItems({commit}){
       commit('clearCartItems');
       commit('clearOrderedItems');
-    }
+    },
   },
   modules: {
   }
