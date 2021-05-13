@@ -31,6 +31,7 @@ export default new Vuex.Store({
     flag: true,
     cartItems:null,
     orderedItems:[],
+    sideNav:false
   },
   getters:{
     uid:state=>state.login_user ? state.login_user.uid:null,
@@ -69,11 +70,17 @@ export default new Vuex.Store({
     deleteLoginUser(state){
       state.login_user = null;
     },
+    sideNav(state){
+      state.sideNav = !state.sideNav
+    }
   },
   actions: {
     //ログアウト処理
     logout(){
       firebase.auth().signOut();
+    },
+    sideNav({commit}){
+      commit('sideNav')
     },
     //ユーザー登録
     register({state, commit}, {email,password}){
