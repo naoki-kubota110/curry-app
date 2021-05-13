@@ -31,7 +31,6 @@ export default new Vuex.Store({
     flag: true,
     cartItems:null,
     orderedItems:[],
-    historyBox:[],
   },
   getters:{
     uid:state=>state.login_user ? state.login_user.uid:null,
