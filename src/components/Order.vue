@@ -12,10 +12,15 @@
               メールアドレス<v-text-field v-model="orderInfo.email" :rules="emailRules"></v-text-field>
             </div>
             <div>
-              郵便番号<v-text-field v-model="orderInfo.zip" :rules="zipRules"></v-text-field>
+              郵便番号
+              <v-text-field v-model="orderInfo.zip" :rules="zipRules">
+                <template v-slot:append-outer>
+                  <v-btn icon @click="addressAutoComplete()"><v-icon>mdi-magnify</v-icon></v-btn>
+                </template>
+              </v-text-field>
             </div>
             <div>
-              住所<v-text-field v-model="orderInfo.address" :rules="addressRules"></v-text-field>
+              住所<v-text-field v-model="orderInfo.address" :rules="addressRules">{{addressComp}}</v-text-field>
             </div>
             <div>
               電話番号<v-text-field v-model="orderInfo.phone" :rules="phoneRules"></v-text-field>
@@ -25,9 +30,7 @@
               <small>日付</small>
               <v-menu
               ref="menu"
-              v-model="menu"
               :close-on-content-click="false"
-              :return-value.sync="date"
               transition="scale-transition"
               offset-y
               min-width="290px"
@@ -35,7 +38,6 @@
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     v-model="orderInfo.date"
-                    prepend-icon=""
                     readonly
                     v-on="on"
                     :rules="dateRules"
@@ -44,7 +46,7 @@
                 </template>
                 <v-date-picker v-model="orderInfo.date" :allowed-dates="allowedDate" no-title scrollable>
                   <v-spacer></v-spacer>
-                  <v-btn text color="orange" @click="$refs.menu.save(date)">OK</v-btn>
+                  <v-btn text color="orange" @click="$refs.menu.save()">OK</v-btn>
                 </v-date-picker>
               </v-menu>
               <small>時間</small>
@@ -56,13 +58,15 @@
               v-model="orderInfo.status"
               :rules="payRules"
             >
-              <v-radio label="代金引換" :value="1"></v-radio>
-              <v-radio label="クレジットカード" :value="2"></v-radio>
+              <v-radio label="代金引換" :value="1" color="warning"></v-radio>
+              <v-radio label="クレジットカード" :value="2" color="warning"></v-radio>
             </v-radio-group>
-            <v-row>
-              <v-col>
-                <v-btn rounded>リセット</v-btn>
-                <v-btn @click="submit" rounded class="orange">この内容で注文する</v-btn>
+            <v-row justify="center">
+              <v-col cols="4" align="center">
+                <v-btn rounded @click="orderInfo={address:'',status:1}">リセット</v-btn>
+              </v-col>
+              <v-col cols="4">
+                <v-btn @click="submit" rounded class="orange" dark>注文する</v-btn>
               </v-col>
             </v-row>
           </v-form>
@@ -72,11 +76,13 @@
   </v-app>
 </template>
 <script>
+import axios from 'axios'
 import {mapActions} from 'vuex'
 export default {
   data() {
     return {
       orderInfo: {
+        address:'',
         status:1
       },
       valid: true,
@@ -97,21 +103,14 @@ export default {
       addressRules: [v => !!v || "住所を入力してください"],
       phoneRules: [
         (v) => !!v || "電話番号を入力してください",
-        (v) =>
+        (v) => 
           /^\d{2,5}-\d{1,4}-\d{4}$/.test(v) ||
           "電話番号はXXXX-XXXX-XXXXの形式で入力してください",
       ],
       dateRules:[v => !!v || '配達日を入力してください',],
       timeRules: [
         (v) => !!v || "配達日時を選択してください",
-        // v => {
-        //   let today = new Date()
-        //   let hours = today.getHours()+4
-        //   if(v<hours){
-        //     return 
-        //   }
-        // }
-        //  || "配達日時を選択してください"
+        v => this.timeCheck(v) || "この時間には配達できません"
       ],
       payRules: [(v) => !!v || "お支払い方法を選択してください"],
       pay: {},
@@ -128,6 +127,18 @@ export default {
       ],
     };
   },
+  computed:{
+    addressComp(){
+      return this.orderInfo.address
+    },
+    paymentMethod(){
+      if(this.orderInfo.status===1){
+        return '代金引換'
+      }else{
+        return 'クレジットカード'
+      }
+    }
+  },
   methods: {
     ...mapActions(['orderConfirm']),
     submit() {
@@ -139,7 +150,7 @@ export default {
       【電話番号】${this.orderInfo.phone}
       【配達日】${this.orderInfo.date}
       【配達時刻】${this.orderInfo.time} 時
-      【お支払い方法】${this.orderInfo.status}
+      【お支払い方法】${this.paymentMethod}
       `;
       if(confirm(inquiry)){
         if(this.$refs.form.validate()){
@@ -190,7 +201,46 @@ export default {
       )
       return today <= new Date(val) && new Date(val) <= maxAllowedDay
      },
-
-  },
+     timeCheck(selectedTime){
+       let date = new Date()
+       let year = date.getFullYear()
+       let month = date.getMonth()+1
+       let day = date.getDate()
+       let nowHour = date.getHours()
+       let today = `${year}-0${month}-${day}`
+       let selectedDay = this.orderInfo.date
+       let nowMinute = date.getMinutes()
+       if(30<nowMinute){
+         nowHour++
+       }
+       let a = Math.abs(selectedTime-nowHour)
+       //入力値が今日の
+       if(selectedDay === today){
+         //現在時刻前だった場合
+         if(selectedTime <= nowHour){
+           return false
+          //入力値の3時間後が18時を超えてしまう場合
+         }else if( 18 < selectedTime+3){
+           return false
+         }else if( 3 <= a ){
+           return true
+         }
+       }else{
+         return true
+       }
+     },
+    addressAutoComplete(){
+      if(this.orderInfo.zip){
+        axios.get(`https://api.zipaddress.net/?zipcode=${this.orderInfo.zip}`)
+        .then(res=>{
+          this.orderInfo.address = res.data.data.fullAddress
+        }).catch(()=>{
+          this.orderInfo.zip = ''
+        })
+      }else{
+        this.orderInfo.zip = ''
+      }
+    },
+  }
 };
 </script>

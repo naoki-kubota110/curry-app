@@ -61,7 +61,6 @@ export default {
                                 item.num = info.itemNum
                                 item.orderId = info.id
                                 item.sum = item.num * item.price
-                                console.log(item.sum)
                                 let a = JSON.stringify(item)
                                 a = JSON.parse(a)
                                 array.push(a)

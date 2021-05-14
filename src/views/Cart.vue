@@ -3,39 +3,45 @@
     <h1 v-if="show" id="cart">ショッピングカート</h1>
     <h1 v-else>注文内容確認</h1>
     <div v-if="cartLength">
-    <v-data-table
-    :headers="headers"
-    :items="cartItems"
-    :items-per-page="5"
-    item-key="cartId"
-    class="elevation-1"
-    disable-sort
-    >
-        <template v-slot:[`item.price`]="{ item }">
-            <td>{{item.price}}円</td>
-        </template>
-        <template v-slot:[`item.number`]="{ item }">
-            <td>{{item.itemNum}}個</td>
-        </template>
-        <template v-slot:[`item.img`]="{ item }">
-            <img :src="item.img" width="100px" height="100px">
-        </template>
-        <template v-slot:[`item.sum`]="{ item }">
-            <td>{{item.price*item.itemNum}}円</td>
-        </template>
-        <template v-slot:[`item.delete`]="{ item }">
-            <v-btn v-if="show" @click="deleteConfirm(item.cartId)" color="error" rounded><strong>削除</strong></v-btn>
-        </template>
-    </v-data-table>
-    <div>
-        <h2>消費税：{{priceSum*tax}}円</h2>
-        <h2>ご注文金額合計：{{Math.floor(priceSum+(priceSum*tax))}}円(税込)</h2>
-        <v-btn v-if="show" color="orange" dark @click="loginCheck()" rounded href="#orderForm">注文に進む</v-btn>
-        <v-btn v-if="!show" @click="show=!show" rounded>カートに戻る</v-btn>
-    </div>
-    <div id="orderForm">
-    <Order v-show="!show"/>
-    </div>
+        <v-row>
+            <v-col>
+                <v-data-table
+                :headers="headers"
+                :items="cartItems"
+                :items-per-page="5"
+                item-key="cartId"
+                class="elevation-1"
+                disable-sort
+                >
+                    <template v-slot:[`item.price`]="{ item }">
+                        <td>{{item.price.toLocaleString('ja-JP')}}円</td>
+                    </template>
+                    <template v-slot:[`item.number`]="{ item }">
+                        <td>{{item.itemNum}}個</td>
+                    </template>
+                    <template v-slot:[`item.img`]="{ item }">
+                        <img :src="item.img" width="100px" height="100px">
+                    </template>
+                    <template v-slot:[`item.sum`]="{ item }">
+                        <td>{{(item.price*item.itemNum).toLocaleString('ja-JP')}}円</td>
+                    </template>
+                    <template v-slot:[`item.delete`]="{ item }">
+                        <v-btn v-if="show" @click="deleteConfirm(item.cartId)" color="error" rounded><strong>削除</strong></v-btn>
+                    </template>
+                </v-data-table>
+            </v-col>
+        </v-row>
+        <v-row class="ma-2">
+            <v-col align="center">
+                <h2>消費税：{{(priceSum*tax).toLocaleString('ja-JP')}}円</h2>
+                <h2>ご注文金額合計：{{(Math.floor(priceSum+(priceSum*tax)).toLocaleString('ja-JP'))}}円(税込)</h2>
+                <v-btn v-if="show" color="orange" dark @click="loginCheck()" rounded href="#orderForm">注文に進む</v-btn>
+                <v-btn v-if="!show" @click="show=!show" rounded>カートに戻る</v-btn>
+            </v-col>
+        </v-row>
+        <div id="orderForm">
+        <Order v-show="!show"/>
+        </div>
     </div>
     <div v-else>
         <h3>商品はありません</h3>
