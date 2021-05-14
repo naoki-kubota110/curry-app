@@ -3,17 +3,17 @@
   <v-row justify="center" no-gutters align="center">
     <v-col align="center" cols="1" id="cols">
       <router-link id="links" to="/" class="ma-5 link" >
-        <v-icon>mdi-home</v-icon>
+        <v-btn text retain-focus-on-click><v-icon>mdi-home</v-icon></v-btn>
       </router-link>
     </v-col>
     <v-col align="center" cols="1" id="cols">
       <router-link id="links" to="/cart" class="ma-5 link">
-        <v-icon>mdi-cart</v-icon>
+        <v-btn text retain-focus-on-click><v-icon>mdi-cart</v-icon></v-btn>
       </router-link>
     </v-col>
     <v-col align="center" cols="1" v-if="$store.state.login_user" id="cols">
       <router-link id="links" to="/orderhistory" class="ma-5 link" >
-        <v-icon>mdi-playlist-check</v-icon>
+        <v-btn text retain-focus-on-click><v-icon>mdi-playlist-check</v-icon></v-btn>
       </router-link>
     </v-col>
   </v-row>

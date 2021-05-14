@@ -219,10 +219,9 @@ export default {
          //現在時刻前だった場合
          if(selectedTime <= nowHour){
            return false
-          //入力値の3時間後が18時を超えてしまう場合
-         }else if( 18 < selectedTime+3){
-           return false
+          //
          }else if( 3 <= a ){
+           console.log(a)
            return true
          }
        }else{
