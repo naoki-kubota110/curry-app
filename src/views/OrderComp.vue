@@ -8,6 +8,6 @@
       <p>メールが届かない場合は「注文履歴」からご確認ください。</p>
       <v-btn dark rounded class="orange" :to="{name:'Home'}">トップ画面を表示する</v-btn>
     </v-col>
-</v-row>
+  </v-row>
 </v-container>
 </template>

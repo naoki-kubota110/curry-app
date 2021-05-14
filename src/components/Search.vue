@@ -39,7 +39,7 @@
     <v-row>
       <v-spacer></v-spacer>
       <v-col cols="9">
-        <div>普通 : <span id="price">{{search.price.toLocaleString()}}</span>円(税抜き)</div>
+        <div>普通 : <span id="price">{{search.price.toLocaleString()}}</span>円(税抜)</div>
       </v-col>
     </v-row>
   </v-card>
