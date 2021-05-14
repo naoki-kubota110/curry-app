@@ -1,29 +1,30 @@
 <template>
 <v-container  class="my-50" justify-center>
     <h1>注文履歴</h1>
-    <p v-if="changeFlag" style="color:red; font-weight:bold;">注文履歴はありません</p>
-
-  <v-data-table
-    :headers="headers"
-    :items="orderedItemsInfo"
-    :items-per-page="5"
-    item-key="orderedId"
-    class="elevation-1"
-    disable-sort
-    >
-        <template v-slot:[`item.price`]="{ item }">
-            <td>{{item.price}}円</td>
-        </template>
-        <template v-slot:[`item.number`]="{ item }">
-            <td>{{item.itemNum}}個</td>
-        </template>
-        <template v-slot:[`item.img`]="{ item }">
-            <img :src="item.img" width="100px" height="100px">
-        </template>
-        <template v-slot:[`item.sum`]="{ item }">
-            <td>{{item.sum}}円</td>
-        </template>
-    </v-data-table>
+    <h3 v-if="changeFlag" style="font-weight:bold;">注文履歴はありません</h3>
+    <div v-else>
+    <v-data-table
+        :headers="headers"
+        :items="orderedItemsInfo"
+        :items-per-page="5"
+        item-key="orderedId"
+        class="elevation-1"
+        disable-sort
+        >
+            <template v-slot:[`item.price`]="{ item }">
+                <td>{{item.price}}円</td>
+            </template>
+            <template v-slot:[`item.number`]="{ item }">
+                <td>{{item.itemNum}}個</td>
+            </template>
+            <template v-slot:[`item.img`]="{ item }">
+                <img :src="item.img" width="100px" height="100px">
+            </template>
+            <template v-slot:[`item.sum`]="{ item }">
+                <td>{{item.sum}}円</td>
+            </template>
+        </v-data-table>
+        </div>
   </v-container>
 <!-- </v-container> -->
 </template>
